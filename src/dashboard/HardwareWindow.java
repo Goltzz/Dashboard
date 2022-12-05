@@ -29,42 +29,67 @@ public class HardwareWindow extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton6 = new javax.swing.JButton();
+        leaveHardwareWindow = new javax.swing.JButton();
+        showDevices = new javax.swing.JButton();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        txtPanel = new javax.swing.JTextPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jButton6.setText("Sair");
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
+        leaveHardwareWindow.setText("Sair");
+        leaveHardwareWindow.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
+                leaveHardwareWindowActionPerformed(evt);
             }
         });
+
+        showDevices.setText("Hardware");
+        showDevices.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                showDevicesActionPerformed(evt);
+            }
+        });
+
+        jScrollPane4.setViewportView(txtPanel);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(263, Short.MAX_VALUE)
-                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(41, 41, 41))
+                .addGap(20, 20, 20)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane4)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(showDevices, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 168, Short.MAX_VALUE)
+                        .addComponent(leaveHardwareWindow, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(20, 20, 20))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(248, Short.MAX_VALUE)
-                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(leaveHardwareWindow, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(showDevices, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(16, 16, 16))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+    private void leaveHardwareWindowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_leaveHardwareWindowActionPerformed
         this.setVisible(false);
-    }//GEN-LAST:event_jButton6ActionPerformed
-    private static void execShellCommand(String command){
-        procBuilder.command(command);
+    }//GEN-LAST:event_leaveHardwareWindowActionPerformed
+
+    private void showDevicesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showDevicesActionPerformed
+        execShellCommand("cat /proc/devices");
+    }//GEN-LAST:event_showDevicesActionPerformed
+    private void execShellCommand(String command){
+        procBuilder.command("bash","-c",command);
         try{
             
             Process process = procBuilder.start();
@@ -79,7 +104,7 @@ public class HardwareWindow extends javax.swing.JFrame {
             int exitVal = process.waitFor();
 		if (exitVal == 0) {
 			System.out.println("Success!");
-			System.out.println(output);
+			txtPanel.setText(output.toString());
 		} else {
 			
                 }
@@ -123,11 +148,15 @@ public class HardwareWindow extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new HardwareWindow().setVisible(true);
-                execShellCommand("cat /proc/devices");
             }
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton6;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JButton leaveHardwareWindow;
+    private javax.swing.JButton showDevices;
+    private javax.swing.JTextPane txtPanel;
     // End of variables declaration//GEN-END:variables
 }
