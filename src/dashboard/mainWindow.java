@@ -19,11 +19,13 @@ public class mainWindow extends javax.swing.JFrame {
     private String processInfo;
     private String memoryInfo;
     private String hardwareInfo;
+    private String fileInfo;
     public mainWindow() {
         initComponents();
         processInfo = new String();
         memoryInfo = new String();
         hardwareInfo = new String();
+        fileInfo = new String();
     }
 
     @SuppressWarnings("unchecked")
@@ -40,10 +42,16 @@ public class mainWindow extends javax.swing.JFrame {
         jTabbedPane2 = new javax.swing.JTabbedPane();
         hardwarePanel = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextPane1 = new javax.swing.JTextPane();
+        hardwareTxtPane = new javax.swing.JTextPane();
         processPanel = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        processTxtPane = new javax.swing.JTextPane();
         memoryPanel = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        memoryTxtPane = new javax.swing.JTextPane();
         filePanel = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        fileTxtPane = new javax.swing.JTextPane();
 
         javax.swing.GroupLayout jFrame1Layout = new javax.swing.GroupLayout(jFrame1.getContentPane());
         jFrame1.getContentPane().setLayout(jFrame1Layout);
@@ -145,7 +153,10 @@ public class mainWindow extends javax.swing.JFrame {
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
-        jScrollPane1.setViewportView(jTextPane1);
+        hardwareTxtPane.setEditable(false);
+        hardwareTxtPane.setBorder(null);
+        hardwareTxtPane.setPreferredSize(new java.awt.Dimension(64, 20));
+        jScrollPane1.setViewportView(hardwareTxtPane);
 
         javax.swing.GroupLayout hardwarePanelLayout = new javax.swing.GroupLayout(hardwarePanel);
         hardwarePanel.setLayout(hardwarePanelLayout);
@@ -155,7 +166,7 @@ public class mainWindow extends javax.swing.JFrame {
             .addGroup(hardwarePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(hardwarePanelLayout.createSequentialGroup()
                     .addContainerGap()
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 596, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 620, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addContainerGap(538, Short.MAX_VALUE)))
         );
         hardwarePanelLayout.setVerticalGroup(
@@ -164,47 +175,83 @@ public class mainWindow extends javax.swing.JFrame {
             .addGroup(hardwarePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(hardwarePanelLayout.createSequentialGroup()
                     .addContainerGap()
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 434, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addContainerGap(419, Short.MAX_VALUE)))
         );
 
         jTabbedPane2.addTab("tab1", hardwarePanel);
 
+        processTxtPane.setEditable(false);
+        processTxtPane.setBackground(new java.awt.Color(255, 255, 255));
+        processTxtPane.setPreferredSize(new java.awt.Dimension(64, 20));
+        jScrollPane2.setViewportView(processTxtPane);
+
         javax.swing.GroupLayout processPanelLayout = new javax.swing.GroupLayout(processPanel);
         processPanel.setLayout(processPanelLayout);
         processPanelLayout.setHorizontalGroup(
             processPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1140, Short.MAX_VALUE)
+            .addGroup(processPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 620, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(390, Short.MAX_VALUE))
         );
         processPanelLayout.setVerticalGroup(
             processPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 859, Short.MAX_VALUE)
+            .addGroup(processPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(360, Short.MAX_VALUE))
         );
 
         jTabbedPane2.addTab("tab2", processPanel);
+
+        memoryTxtPane.setEditable(false);
+        memoryTxtPane.setBorder(null);
+        memoryTxtPane.setPreferredSize(new java.awt.Dimension(64, 20));
+        jScrollPane3.setViewportView(memoryTxtPane);
 
         javax.swing.GroupLayout memoryPanelLayout = new javax.swing.GroupLayout(memoryPanel);
         memoryPanel.setLayout(memoryPanelLayout);
         memoryPanelLayout.setHorizontalGroup(
             memoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1140, Short.MAX_VALUE)
+            .addGroup(memoryPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 620, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(547, Short.MAX_VALUE))
         );
         memoryPanelLayout.setVerticalGroup(
             memoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 859, Short.MAX_VALUE)
+            .addGroup(memoryPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(363, Short.MAX_VALUE))
         );
 
         jTabbedPane2.addTab("tab3", memoryPanel);
+
+        jScrollPane4.setPreferredSize(new java.awt.Dimension(622, 542));
+
+        fileTxtPane.setEditable(false);
+        fileTxtPane.setBorder(null);
+        fileTxtPane.setPreferredSize(new java.awt.Dimension(620, 540));
+        fileTxtPane.setRequestFocusEnabled(false);
+        jScrollPane4.setViewportView(fileTxtPane);
 
         javax.swing.GroupLayout filePanelLayout = new javax.swing.GroupLayout(filePanel);
         filePanel.setLayout(filePanelLayout);
         filePanelLayout.setHorizontalGroup(
             filePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1140, Short.MAX_VALUE)
+            .addGroup(filePanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 621, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(513, Short.MAX_VALUE))
         );
         filePanelLayout.setVerticalGroup(
             filePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 859, Short.MAX_VALUE)
+            .addGroup(filePanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(353, Short.MAX_VALUE))
         );
 
         jTabbedPane2.addTab("tab4", filePanel);
@@ -216,12 +263,16 @@ public class mainWindow extends javax.swing.JFrame {
 
     private void memoryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_memoryButtonActionPerformed
         jTabbedPane2.setSelectedIndex(2);
+        memoryInfo = execShellCommand("less /proc/meminfo");
+        memoryTxtPane.setText(memoryInfo);
     }//GEN-LAST:event_memoryButtonActionPerformed
 
     private void hardwareButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hardwareButtonActionPerformed
         jTabbedPane2.setSelectedIndex(0);
-        hardwareInfo = execShellCommand("lshw");
-        jTextPane1.setText(hardwareInfo);
+        StringBuilder sb = new StringBuilder(execShellCommand("lshw | grep Intel"));
+        sb.append(execShellCommand("uname -a"));
+        hardwareInfo = sb.toString();
+        hardwareTxtPane.setText(hardwareInfo);
     }//GEN-LAST:event_hardwareButtonActionPerformed
 
     private void commandLineButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_commandLineButtonActionPerformed
@@ -237,12 +288,14 @@ public class mainWindow extends javax.swing.JFrame {
 
     private void processButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_processButtonActionPerformed
         jTabbedPane2.setSelectedIndex(1);
-        processInfo = execShellCommand("top -b");
-        jTextPane1.setText(processInfo);
+        processInfo = execShellCommand("ps a");
+        processTxtPane.setText(processInfo);
     }//GEN-LAST:event_processButtonActionPerformed
 
     private void fileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileButtonActionPerformed
         jTabbedPane2.setSelectedIndex(3);
+        fileInfo = execShellCommand("ls -lh / ");
+        fileTxtPane.setText(fileInfo);
     }//GEN-LAST:event_fileButtonActionPerformed
     private String execShellCommand(String command){
         ProcessBuilder procBuilder = new ProcessBuilder();
@@ -311,16 +364,22 @@ public class mainWindow extends javax.swing.JFrame {
     private javax.swing.JButton commandLineButton;
     private javax.swing.JButton fileButton;
     private javax.swing.JPanel filePanel;
+    private javax.swing.JTextPane fileTxtPane;
     private javax.swing.JButton hardwareButton;
     private javax.swing.JPanel hardwarePanel;
+    private javax.swing.JTextPane hardwareTxtPane;
     private javax.swing.JFrame jFrame1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTabbedPane jTabbedPane2;
-    private javax.swing.JTextPane jTextPane1;
     private javax.swing.JButton memoryButton;
     private javax.swing.JPanel memoryPanel;
+    private javax.swing.JTextPane memoryTxtPane;
     private javax.swing.JButton processButton;
     private javax.swing.JPanel processPanel;
+    private javax.swing.JTextPane processTxtPane;
     // End of variables declaration//GEN-END:variables
 }
