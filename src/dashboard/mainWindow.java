@@ -37,16 +37,18 @@ public class mainWindow extends javax.swing.JFrame {
         commandLineButton = new javax.swing.JButton();
         firstQuadrantBox = new javax.swing.JComboBox<>();
         secondQuadrantBox = new javax.swing.JComboBox<>();
-        thirdQuadrandBox = new javax.swing.JComboBox<>();
+        thirdQuadrantBox = new javax.swing.JComboBox<>();
         fourthQuadrantBox = new javax.swing.JComboBox<>();
-        jScrollPane5 = new javax.swing.JScrollPane();
-        fourthQuadrantTxt = new javax.swing.JTextPane();
-        jScrollPane6 = new javax.swing.JScrollPane();
-        firstQuadrantTxt = new javax.swing.JTextPane();
+        bottomSplit = new javax.swing.JSplitPane();
         jScrollPane7 = new javax.swing.JScrollPane();
         thirdQuadrantTxt = new javax.swing.JTextPane();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        fourthQuadrantTxt = new javax.swing.JTextPane();
+        topSplit = new javax.swing.JSplitPane();
         jScrollPane8 = new javax.swing.JScrollPane();
         secondQuadrantTxt = new javax.swing.JTextPane();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        firstQuadrantTxt = new javax.swing.JTextPane();
 
         javax.swing.GroupLayout jFrame1Layout = new javax.swing.GroupLayout(jFrame1.getContentPane());
         jFrame1.getContentPane().setLayout(jFrame1Layout);
@@ -60,6 +62,7 @@ public class mainWindow extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(37, 150, 190));
@@ -93,12 +96,12 @@ public class mainWindow extends javax.swing.JFrame {
             }
         });
 
-        thirdQuadrandBox.setBackground(new java.awt.Color(238, 238, 228));
-        thirdQuadrandBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Hardware/SO", "Processos", "Memória", "Sist. de Arquivos" }));
-        thirdQuadrandBox.setSelectedIndex(2);
-        thirdQuadrandBox.addItemListener(new java.awt.event.ItemListener() {
+        thirdQuadrantBox.setBackground(new java.awt.Color(238, 238, 228));
+        thirdQuadrantBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Hardware/SO", "Processos", "Memória", "Sist. de Arquivos" }));
+        thirdQuadrantBox.setSelectedIndex(2);
+        thirdQuadrantBox.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                thirdQuadrandBoxItemStateChanged(evt);
+                thirdQuadrantBoxItemStateChanged(evt);
             }
         });
 
@@ -118,11 +121,11 @@ public class mainWindow extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(commandLineButton, javax.swing.GroupLayout.DEFAULT_SIZE, 168, Short.MAX_VALUE)
-                    .addComponent(firstQuadrantBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(secondQuadrantBox, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(thirdQuadrandBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(fourthQuadrantBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(commandLineButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(firstQuadrantBox, 0, 168, Short.MAX_VALUE)
+                    .addComponent(secondQuadrantBox, javax.swing.GroupLayout.Alignment.TRAILING, 0, 0, Short.MAX_VALUE)
+                    .addComponent(thirdQuadrantBox, 0, 0, Short.MAX_VALUE)
+                    .addComponent(fourthQuadrantBox, 0, 0, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -133,7 +136,7 @@ public class mainWindow extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(secondQuadrantBox, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(thirdQuadrandBox, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(thirdQuadrantBox, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(fourthQuadrantBox, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -143,33 +146,49 @@ public class mainWindow extends javax.swing.JFrame {
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
-        jScrollPane5.setPreferredSize(new java.awt.Dimension(570, 430));
-        jScrollPane5.setViewportView(fourthQuadrantTxt);
-
-        getContentPane().add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 430, -1, -1));
-
-        jScrollPane6.setPreferredSize(new java.awt.Dimension(570, 430));
-        jScrollPane6.setViewportView(firstQuadrantTxt);
-
-        getContentPane().add(jScrollPane6, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 0, -1, -1));
+        bottomSplit.setDividerLocation(571);
+        bottomSplit.setDividerSize(2);
 
         jScrollPane7.setPreferredSize(new java.awt.Dimension(570, 430));
+
+        thirdQuadrantTxt.setEditable(false);
         jScrollPane7.setViewportView(thirdQuadrantTxt);
 
-        getContentPane().add(jScrollPane7, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 430, -1, -1));
+        bottomSplit.setLeftComponent(jScrollPane7);
+
+        jScrollPane5.setPreferredSize(new java.awt.Dimension(570, 430));
+
+        fourthQuadrantTxt.setEditable(false);
+        jScrollPane5.setViewportView(fourthQuadrantTxt);
+
+        bottomSplit.setRightComponent(jScrollPane5);
+
+        getContentPane().add(bottomSplit, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 430, 1140, 430));
+
+        topSplit.setDividerSize(2);
 
         jScrollPane8.setPreferredSize(new java.awt.Dimension(570, 430));
+
+        secondQuadrantTxt.setEditable(false);
         jScrollPane8.setViewportView(secondQuadrantTxt);
 
-        getContentPane().add(jScrollPane8, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 0, -1, -1));
+        topSplit.setRightComponent(jScrollPane8);
+
+        jScrollPane6.setPreferredSize(new java.awt.Dimension(570, 430));
+
+        firstQuadrantTxt.setEditable(false);
+        jScrollPane6.setViewportView(firstQuadrantTxt);
+
+        topSplit.setLeftComponent(jScrollPane6);
+
+        getContentPane().add(topSplit, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 0, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
     private void prepareHardwareInfo(){
-        StringBuilder sb = new StringBuilder(execShellCommand("lscpu "));
+        StringBuilder sb = new StringBuilder(execShellCommand("lscpu | grep Architecture"));
         sb.append(execShellCommand("uname -a"));
         hardwareInfo = sb.toString();
-        firstQuadrantTxt.setText(hardwareInfo);
     }
     
     private void prepareProcessInfo(){
@@ -220,15 +239,75 @@ public class mainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_firstQuadrantBoxItemStateChanged
 
     private void secondQuadrantBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_secondQuadrantBoxItemStateChanged
-        // TODO add your handling code here:
+        int index = secondQuadrantBox.getSelectedIndex();
+        switch (index) {
+            case 0 -> {
+                prepareHardwareInfo();
+                secondQuadrantTxt.setText(hardwareInfo);
+            }
+            case 1 -> {
+                prepareProcessInfo();
+                secondQuadrantTxt.setText(processInfo);
+            }
+            case 2 -> {
+                prepareMemoryInfo();
+                secondQuadrantTxt.setText(memoryInfo);
+            }
+            case 3 -> {
+                prepareFileInfo();
+                secondQuadrantTxt.setText(fileInfo);
+            }
+            default -> {
+            }
+        }
     }//GEN-LAST:event_secondQuadrantBoxItemStateChanged
 
-    private void thirdQuadrandBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_thirdQuadrandBoxItemStateChanged
-        // TODO add your handling code here:
-    }//GEN-LAST:event_thirdQuadrandBoxItemStateChanged
+    private void thirdQuadrantBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_thirdQuadrantBoxItemStateChanged
+        int index = thirdQuadrantBox.getSelectedIndex();
+        switch (index) {
+            case 0 -> {
+                prepareHardwareInfo();
+                thirdQuadrantTxt.setText(hardwareInfo);
+            }
+            case 1 -> {
+                prepareProcessInfo();
+                thirdQuadrantTxt.setText(processInfo);
+            }
+            case 2 -> {
+                prepareMemoryInfo();
+                thirdQuadrantTxt.setText(memoryInfo);
+            }
+            case 3 -> {
+                prepareFileInfo();
+                thirdQuadrantTxt.setText(fileInfo);
+            }
+            default -> {
+            }
+        }
+    }//GEN-LAST:event_thirdQuadrantBoxItemStateChanged
 
     private void fourthQuadrantBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_fourthQuadrantBoxItemStateChanged
-        // TODO add your handling code here:
+        int index = fourthQuadrantBox.getSelectedIndex();
+        switch (index) {
+            case 0 -> {
+                prepareHardwareInfo();
+                fourthQuadrantTxt.setText(hardwareInfo);
+            }
+            case 1 -> {
+                prepareProcessInfo();
+                fourthQuadrantTxt.setText(processInfo);
+            }
+            case 2 -> {
+                prepareMemoryInfo();
+                fourthQuadrantTxt.setText(memoryInfo);
+            }
+            case 3 -> {
+                prepareFileInfo();
+                fourthQuadrantTxt.setText(fileInfo);
+            }
+            default -> {
+            }
+        }
     }//GEN-LAST:event_fourthQuadrantBoxItemStateChanged
     private String execShellCommand(String command){
         ProcessBuilder procBuilder = new ProcessBuilder();
@@ -294,6 +373,7 @@ public class mainWindow extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JSplitPane bottomSplit;
     private javax.swing.JButton commandLineButton;
     private javax.swing.JComboBox<String> firstQuadrantBox;
     private javax.swing.JTextPane firstQuadrantTxt;
@@ -307,7 +387,8 @@ public class mainWindow extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JComboBox<String> secondQuadrantBox;
     private javax.swing.JTextPane secondQuadrantTxt;
-    private javax.swing.JComboBox<String> thirdQuadrandBox;
+    private javax.swing.JComboBox<String> thirdQuadrantBox;
     private javax.swing.JTextPane thirdQuadrantTxt;
+    private javax.swing.JSplitPane topSplit;
     // End of variables declaration//GEN-END:variables
 }
