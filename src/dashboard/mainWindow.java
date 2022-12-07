@@ -34,24 +34,19 @@ public class mainWindow extends javax.swing.JFrame {
 
         jFrame1 = new javax.swing.JFrame();
         jPanel1 = new javax.swing.JPanel();
-        memoryButton = new javax.swing.JButton();
-        hardwareButton = new javax.swing.JButton();
         commandLineButton = new javax.swing.JButton();
-        processButton = new javax.swing.JButton();
-        fileButton = new javax.swing.JButton();
-        jTabbedPane2 = new javax.swing.JTabbedPane();
-        hardwarePanel = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        hardwareTxtPane = new javax.swing.JTextPane();
-        processPanel = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        processTxtPane = new javax.swing.JTextPane();
-        memoryPanel = new javax.swing.JPanel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        memoryTxtPane = new javax.swing.JTextPane();
-        filePanel = new javax.swing.JPanel();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        fileTxtPane = new javax.swing.JTextPane();
+        firstQuadrantBox = new javax.swing.JComboBox<>();
+        secondQuadrantBox = new javax.swing.JComboBox<>();
+        thirdQuadrandBox = new javax.swing.JComboBox<>();
+        fourthQuadrantBox = new javax.swing.JComboBox<>();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        fourthQuadrantTxt = new javax.swing.JTextPane();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        firstQuadrantTxt = new javax.swing.JTextPane();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        thirdQuadrantTxt = new javax.swing.JTextPane();
+        jScrollPane8 = new javax.swing.JScrollPane();
+        secondQuadrantTxt = new javax.swing.JTextPane();
 
         javax.swing.GroupLayout jFrame1Layout = new javax.swing.GroupLayout(jFrame1.getContentPane());
         jFrame1.getContentPane().setLayout(jFrame1Layout);
@@ -71,26 +66,6 @@ public class mainWindow extends javax.swing.JFrame {
         jPanel1.setPreferredSize(new java.awt.Dimension(180, 860));
         jPanel1.setRequestFocusEnabled(false);
 
-        memoryButton.setBackground(new java.awt.Color(238, 238, 228));
-        memoryButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/memory.png"))); // NOI18N
-        memoryButton.setText("Memória");
-        memoryButton.setBorder(null);
-        memoryButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                memoryButtonActionPerformed(evt);
-            }
-        });
-
-        hardwareButton.setBackground(new java.awt.Color(238, 238, 228));
-        hardwareButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/settings.png"))); // NOI18N
-        hardwareButton.setText("Hardware/SO");
-        hardwareButton.setBorder(null);
-        hardwareButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                hardwareButtonActionPerformed(evt);
-            }
-        });
-
         commandLineButton.setBackground(new java.awt.Color(238, 238, 228));
         commandLineButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/terminal.png"))); // NOI18N
         commandLineButton.setText("Terminal");
@@ -101,23 +76,38 @@ public class mainWindow extends javax.swing.JFrame {
             }
         });
 
-        processButton.setBackground(new java.awt.Color(238, 238, 228));
-        processButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/process.png"))); // NOI18N
-        processButton.setText("Processos");
-        processButton.setBorder(null);
-        processButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                processButtonActionPerformed(evt);
+        firstQuadrantBox.setBackground(new java.awt.Color(238, 238, 228));
+        firstQuadrantBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Hardware/SO", "Processos", "Memória", "Sist. de Arquivos" }));
+        firstQuadrantBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                firstQuadrantBoxItemStateChanged(evt);
             }
         });
 
-        fileButton.setBackground(new java.awt.Color(238, 238, 228));
-        fileButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/file-system.png"))); // NOI18N
-        fileButton.setText("Sist. de Arquivos");
-        fileButton.setBorder(null);
-        fileButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                fileButtonActionPerformed(evt);
+        secondQuadrantBox.setBackground(new java.awt.Color(238, 238, 228));
+        secondQuadrantBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Hardware/SO", "Processos", "Memória", "Sist. de Arquivos" }));
+        secondQuadrantBox.setSelectedIndex(1);
+        secondQuadrantBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                secondQuadrantBoxItemStateChanged(evt);
+            }
+        });
+
+        thirdQuadrandBox.setBackground(new java.awt.Color(238, 238, 228));
+        thirdQuadrandBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Hardware/SO", "Processos", "Memória", "Sist. de Arquivos" }));
+        thirdQuadrandBox.setSelectedIndex(2);
+        thirdQuadrandBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                thirdQuadrandBoxItemStateChanged(evt);
+            }
+        });
+
+        fourthQuadrantBox.setBackground(new java.awt.Color(238, 238, 228));
+        fourthQuadrantBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Hardware/SO", "Processos", "Memória", "Sist. de Arquivos" }));
+        fourthQuadrantBox.setSelectedIndex(3);
+        fourthQuadrantBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                fourthQuadrantBoxItemStateChanged(evt);
             }
         });
 
@@ -128,153 +118,72 @@ public class mainWindow extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(memoryButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(commandLineButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 168, Short.MAX_VALUE)
-                    .addComponent(hardwareButton, javax.swing.GroupLayout.DEFAULT_SIZE, 168, Short.MAX_VALUE)
-                    .addComponent(processButton, javax.swing.GroupLayout.DEFAULT_SIZE, 168, Short.MAX_VALUE)
-                    .addComponent(fileButton, javax.swing.GroupLayout.DEFAULT_SIZE, 168, Short.MAX_VALUE))
+                    .addComponent(commandLineButton, javax.swing.GroupLayout.DEFAULT_SIZE, 168, Short.MAX_VALUE)
+                    .addComponent(firstQuadrantBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(secondQuadrantBox, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(thirdQuadrandBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(fourthQuadrantBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(51, 51, 51)
-                .addComponent(hardwareButton, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(61, 61, 61)
+                .addComponent(firstQuadrantBox, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(processButton, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(secondQuadrantBox, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(memoryButton, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(thirdQuadrandBox, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(fileButton, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(fourthQuadrantBox, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(commandLineButton, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(477, Short.MAX_VALUE))
+                .addContainerGap(467, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
-        hardwareTxtPane.setEditable(false);
-        hardwareTxtPane.setBorder(null);
-        hardwareTxtPane.setPreferredSize(new java.awt.Dimension(64, 20));
-        jScrollPane1.setViewportView(hardwareTxtPane);
+        jScrollPane5.setPreferredSize(new java.awt.Dimension(570, 430));
+        jScrollPane5.setViewportView(fourthQuadrantTxt);
 
-        javax.swing.GroupLayout hardwarePanelLayout = new javax.swing.GroupLayout(hardwarePanel);
-        hardwarePanel.setLayout(hardwarePanelLayout);
-        hardwarePanelLayout.setHorizontalGroup(
-            hardwarePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1140, Short.MAX_VALUE)
-            .addGroup(hardwarePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(hardwarePanelLayout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 620, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(538, Short.MAX_VALUE)))
-        );
-        hardwarePanelLayout.setVerticalGroup(
-            hardwarePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 859, Short.MAX_VALUE)
-            .addGroup(hardwarePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(hardwarePanelLayout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(419, Short.MAX_VALUE)))
-        );
+        getContentPane().add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 430, -1, -1));
 
-        jTabbedPane2.addTab("tab1", hardwarePanel);
+        jScrollPane6.setPreferredSize(new java.awt.Dimension(570, 430));
+        jScrollPane6.setViewportView(firstQuadrantTxt);
 
-        processTxtPane.setEditable(false);
-        processTxtPane.setBackground(new java.awt.Color(255, 255, 255));
-        processTxtPane.setPreferredSize(new java.awt.Dimension(64, 20));
-        jScrollPane2.setViewportView(processTxtPane);
+        getContentPane().add(jScrollPane6, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 0, -1, -1));
 
-        javax.swing.GroupLayout processPanelLayout = new javax.swing.GroupLayout(processPanel);
-        processPanel.setLayout(processPanelLayout);
-        processPanelLayout.setHorizontalGroup(
-            processPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(processPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 620, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(390, Short.MAX_VALUE))
-        );
-        processPanelLayout.setVerticalGroup(
-            processPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(processPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(360, Short.MAX_VALUE))
-        );
+        jScrollPane7.setPreferredSize(new java.awt.Dimension(570, 430));
+        jScrollPane7.setViewportView(thirdQuadrantTxt);
 
-        jTabbedPane2.addTab("tab2", processPanel);
+        getContentPane().add(jScrollPane7, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 430, -1, -1));
 
-        memoryTxtPane.setEditable(false);
-        memoryTxtPane.setBorder(null);
-        memoryTxtPane.setPreferredSize(new java.awt.Dimension(64, 20));
-        jScrollPane3.setViewportView(memoryTxtPane);
+        jScrollPane8.setPreferredSize(new java.awt.Dimension(570, 430));
+        jScrollPane8.setViewportView(secondQuadrantTxt);
 
-        javax.swing.GroupLayout memoryPanelLayout = new javax.swing.GroupLayout(memoryPanel);
-        memoryPanel.setLayout(memoryPanelLayout);
-        memoryPanelLayout.setHorizontalGroup(
-            memoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(memoryPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 620, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(547, Short.MAX_VALUE))
-        );
-        memoryPanelLayout.setVerticalGroup(
-            memoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(memoryPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(363, Short.MAX_VALUE))
-        );
-
-        jTabbedPane2.addTab("tab3", memoryPanel);
-
-        jScrollPane4.setPreferredSize(new java.awt.Dimension(622, 542));
-
-        fileTxtPane.setEditable(false);
-        fileTxtPane.setBorder(null);
-        fileTxtPane.setPreferredSize(new java.awt.Dimension(620, 540));
-        fileTxtPane.setRequestFocusEnabled(false);
-        jScrollPane4.setViewportView(fileTxtPane);
-
-        javax.swing.GroupLayout filePanelLayout = new javax.swing.GroupLayout(filePanel);
-        filePanel.setLayout(filePanelLayout);
-        filePanelLayout.setHorizontalGroup(
-            filePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(filePanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 621, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(513, Short.MAX_VALUE))
-        );
-        filePanelLayout.setVerticalGroup(
-            filePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(filePanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(353, Short.MAX_VALUE))
-        );
-
-        jTabbedPane2.addTab("tab4", filePanel);
-
-        getContentPane().add(jTabbedPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, -30, 1140, 890));
+        getContentPane().add(jScrollPane8, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 0, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void memoryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_memoryButtonActionPerformed
-        jTabbedPane2.setSelectedIndex(2);
-        memoryInfo = execShellCommand("less /proc/meminfo");
-        memoryTxtPane.setText(memoryInfo);
-    }//GEN-LAST:event_memoryButtonActionPerformed
-
-    private void hardwareButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hardwareButtonActionPerformed
-        jTabbedPane2.setSelectedIndex(0);
-        StringBuilder sb = new StringBuilder(execShellCommand("lshw | grep Intel"));
+    private void prepareHardwareInfo(){
+        StringBuilder sb = new StringBuilder(execShellCommand("lscpu "));
         sb.append(execShellCommand("uname -a"));
         hardwareInfo = sb.toString();
-        hardwareTxtPane.setText(hardwareInfo);
-    }//GEN-LAST:event_hardwareButtonActionPerformed
-
+        firstQuadrantTxt.setText(hardwareInfo);
+    }
+    
+    private void prepareProcessInfo(){
+        processInfo = execShellCommand("ps a");
+    }
+    
+    private void prepareMemoryInfo(){
+        memoryInfo = execShellCommand("less /proc/meminfo");
+    }
+    
+    private void prepareFileInfo(){
+        fileInfo = execShellCommand("ls -lh / ");
+    }
+    
     private void commandLineButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_commandLineButtonActionPerformed
         try{
             Process p = Runtime.getRuntime().exec("cmd /c start cmd.exe");
@@ -286,17 +195,41 @@ public class mainWindow extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_commandLineButtonActionPerformed
 
-    private void processButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_processButtonActionPerformed
-        jTabbedPane2.setSelectedIndex(1);
-        processInfo = execShellCommand("ps a");
-        processTxtPane.setText(processInfo);
-    }//GEN-LAST:event_processButtonActionPerformed
+    private void firstQuadrantBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_firstQuadrantBoxItemStateChanged
+        int index = firstQuadrantBox.getSelectedIndex();
+        switch (index) {
+            case 0 -> {
+                prepareHardwareInfo();
+                firstQuadrantTxt.setText(hardwareInfo);
+            }
+            case 1 -> {
+                prepareProcessInfo();
+                firstQuadrantTxt.setText(processInfo);
+            }
+            case 2 -> {
+                prepareMemoryInfo();
+                firstQuadrantTxt.setText(memoryInfo);
+            }
+            case 3 -> {
+                prepareFileInfo();
+                firstQuadrantTxt.setText(fileInfo);
+            }
+            default -> {
+            }
+        }
+    }//GEN-LAST:event_firstQuadrantBoxItemStateChanged
 
-    private void fileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileButtonActionPerformed
-        jTabbedPane2.setSelectedIndex(3);
-        fileInfo = execShellCommand("ls -lh / ");
-        fileTxtPane.setText(fileInfo);
-    }//GEN-LAST:event_fileButtonActionPerformed
+    private void secondQuadrantBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_secondQuadrantBoxItemStateChanged
+        // TODO add your handling code here:
+    }//GEN-LAST:event_secondQuadrantBoxItemStateChanged
+
+    private void thirdQuadrandBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_thirdQuadrandBoxItemStateChanged
+        // TODO add your handling code here:
+    }//GEN-LAST:event_thirdQuadrandBoxItemStateChanged
+
+    private void fourthQuadrantBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_fourthQuadrantBoxItemStateChanged
+        // TODO add your handling code here:
+    }//GEN-LAST:event_fourthQuadrantBoxItemStateChanged
     private String execShellCommand(String command){
         ProcessBuilder procBuilder = new ProcessBuilder();
         procBuilder.command("bash","-c",command);
@@ -306,7 +239,7 @@ public class mainWindow extends javax.swing.JFrame {
             StringBuilder output = new StringBuilder();
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String line;
-
+                
             while((line = reader.readLine()) != null){
                 output.append(line).append("\n");
             }
@@ -362,24 +295,19 @@ public class mainWindow extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton commandLineButton;
-    private javax.swing.JButton fileButton;
-    private javax.swing.JPanel filePanel;
-    private javax.swing.JTextPane fileTxtPane;
-    private javax.swing.JButton hardwareButton;
-    private javax.swing.JPanel hardwarePanel;
-    private javax.swing.JTextPane hardwareTxtPane;
+    private javax.swing.JComboBox<String> firstQuadrantBox;
+    private javax.swing.JTextPane firstQuadrantTxt;
+    private javax.swing.JComboBox<String> fourthQuadrantBox;
+    private javax.swing.JTextPane fourthQuadrantTxt;
     private javax.swing.JFrame jFrame1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JTabbedPane jTabbedPane2;
-    private javax.swing.JButton memoryButton;
-    private javax.swing.JPanel memoryPanel;
-    private javax.swing.JTextPane memoryTxtPane;
-    private javax.swing.JButton processButton;
-    private javax.swing.JPanel processPanel;
-    private javax.swing.JTextPane processTxtPane;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JScrollPane jScrollPane7;
+    private javax.swing.JScrollPane jScrollPane8;
+    private javax.swing.JComboBox<String> secondQuadrantBox;
+    private javax.swing.JTextPane secondQuadrantTxt;
+    private javax.swing.JComboBox<String> thirdQuadrandBox;
+    private javax.swing.JTextPane thirdQuadrantTxt;
     // End of variables declaration//GEN-END:variables
 }
