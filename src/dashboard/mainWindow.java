@@ -7,6 +7,7 @@ package dashboard;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -20,6 +21,10 @@ public class mainWindow extends javax.swing.JFrame {
     private String memoryInfo;
     private String hardwareInfo;
     private String fileInfo;
+    private String formatInfo;
+    private ArrayList<ProcessInfo> processArray = new ArrayList<>();
+    private Memory memory;
+    
     public mainWindow() {
         initComponents();
         processInfo = new String();
@@ -81,6 +86,7 @@ public class mainWindow extends javax.swing.JFrame {
 
         firstQuadrantBox.setBackground(new java.awt.Color(238, 238, 228));
         firstQuadrantBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Hardware/SO", "Processos", "Memória", "Sist. de Arquivos" }));
+        firstQuadrantBox.setSelectedIndex(-1);
         firstQuadrantBox.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 firstQuadrantBoxItemStateChanged(evt);
@@ -89,7 +95,7 @@ public class mainWindow extends javax.swing.JFrame {
 
         secondQuadrantBox.setBackground(new java.awt.Color(238, 238, 228));
         secondQuadrantBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Hardware/SO", "Processos", "Memória", "Sist. de Arquivos" }));
-        secondQuadrantBox.setSelectedIndex(1);
+        secondQuadrantBox.setSelectedIndex(-1);
         secondQuadrantBox.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 secondQuadrantBoxItemStateChanged(evt);
@@ -98,7 +104,7 @@ public class mainWindow extends javax.swing.JFrame {
 
         thirdQuadrantBox.setBackground(new java.awt.Color(238, 238, 228));
         thirdQuadrantBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Hardware/SO", "Processos", "Memória", "Sist. de Arquivos" }));
-        thirdQuadrantBox.setSelectedIndex(2);
+        thirdQuadrantBox.setSelectedIndex(-1);
         thirdQuadrantBox.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 thirdQuadrantBoxItemStateChanged(evt);
@@ -107,7 +113,7 @@ public class mainWindow extends javax.swing.JFrame {
 
         fourthQuadrantBox.setBackground(new java.awt.Color(238, 238, 228));
         fourthQuadrantBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Hardware/SO", "Processos", "Memória", "Sist. de Arquivos" }));
-        fourthQuadrantBox.setSelectedIndex(3);
+        fourthQuadrantBox.setSelectedIndex(-1);
         fourthQuadrantBox.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 fourthQuadrantBoxItemStateChanged(evt);
@@ -165,6 +171,7 @@ public class mainWindow extends javax.swing.JFrame {
 
         getContentPane().add(bottomSplit, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 430, 1140, 430));
 
+        topSplit.setDividerLocation(571);
         topSplit.setDividerSize(2);
 
         jScrollPane8.setPreferredSize(new java.awt.Dimension(570, 430));
@@ -186,17 +193,52 @@ public class mainWindow extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
     private void prepareHardwareInfo(){
-        StringBuilder sb = new StringBuilder(execShellCommand("lscpu | grep Architecture"));
-        sb.append(execShellCommand("uname -a"));
+        StringBuilder sb = new StringBuilder(execShellCommand("uname -a"));
+        sb.append("Processador:-----------------------------------------------------------------------------------------------\n");
+        sb.append(execShellCommand("lscpu|grep -e Architecture -e CPU -e Core"));
+        sb.append("Memória:-----------------------------------------------------------------------------------------------\n");
+        sb.append(execShellCommand("free -h"));
+        sb.append("GPU:-----------------------------------------------------------------------------------------------\n");
+        sb.append("Discos:-----------------------------------------------------------------------------------------------\n");
+        sb.append(execShellCommand("lsblk"));
         hardwareInfo = sb.toString();
     }
     
     private void prepareProcessInfo(){
-        processInfo = execShellCommand("ps a");
+        if(processInfo != null){
+            processInfo = " ";
+        }
+        processInfo = execShellCommand("top -b -n 1");
+        processInfo = processInfo.substring(processInfo.indexOf("PID"));
+        processInfo = processInfo.substring(processInfo.indexOf("\n"));
+        String[] splitProcessInfo = processInfo.split("\\s+");
+        StringBuilder sb = new StringBuilder(String.format("%-8s %-10s %-8s %-8s %-8s %-8s %-8s %-8s %-8s %-8s %-8s %-8s","PID","USUARIO","PR","NI","VIRT","RES","SHR","S","%CPU","%MEM","TEMPO+","COMANDO"));
+        if(!processArray.isEmpty()){
+            rewriteProcessArray(splitProcessInfo);
+        }
+        else{
+            fillProcessArray(splitProcessInfo);
+        }
+        for(int i=0;i< processArray.size();i++){
+            sb.append(System.lineSeparator());
+            sb.append(processArray.get(i).formatLine());
+        }
+        processInfo = sb.toString();
     }
     
     private void prepareMemoryInfo(){
-        memoryInfo = execShellCommand("less /proc/meminfo");
+        memoryInfo = execShellCommand("free -h");
+        memoryInfo = memoryInfo.substring(memoryInfo.indexOf("Mem:"));
+        String[] splitMemoryInfo = memoryInfo.split("\\s+");
+        StringBuilder sb = new StringBuilder(String.format("\t%-10s %-10s %-10s %-20s %-20s %-10s","TOTAL","USADA","LIVRE","COMPARTILHADA","BUFF/CACHE","DISPONÍVEL"));
+        if(memory != null){
+            rewriteMemoryInfo(splitMemoryInfo);
+        }else{
+            memory = new Memory(splitMemoryInfo[1],splitMemoryInfo[2],splitMemoryInfo[3],splitMemoryInfo[4],splitMemoryInfo[5],splitMemoryInfo[6],splitMemoryInfo[8],
+                                splitMemoryInfo[9],splitMemoryInfo[10]);
+        }
+        memory.formatMemLine(sb);
+        memoryInfo = sb.toString();
     }
     
     private void prepareFileInfo(){
@@ -205,7 +247,7 @@ public class mainWindow extends javax.swing.JFrame {
     
     private void commandLineButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_commandLineButtonActionPerformed
         try{
-            Process p = Runtime.getRuntime().exec("cmd /c start cmd.exe");
+            Process p = Runtime.getRuntime().exec("cmd /c start cmd.exe");//trocar para abrir linha do linux
             p.waitFor();
         }catch(IOException ex){
             ex.printStackTrace();
@@ -222,10 +264,12 @@ public class mainWindow extends javax.swing.JFrame {
                 firstQuadrantTxt.setText(hardwareInfo);
             }
             case 1 -> {
+                //fazer a thread (timer) aqui e em todos as outras chamadas de prepareProcessInfo();
                 prepareProcessInfo();
                 firstQuadrantTxt.setText(processInfo);
             }
             case 2 -> {
+                //fazer a thread (timer) aqui e em todos as outras chamadas de prepareMemoryInfo() que estão nas funções que tratam de cada quadrante;
                 prepareMemoryInfo();
                 firstQuadrantTxt.setText(memoryInfo);
             }
@@ -320,7 +364,7 @@ public class mainWindow extends javax.swing.JFrame {
             String line;
                 
             while((line = reader.readLine()) != null){
-                output.append(line).append("\n");
+                output.append(line.stripIndent()).append(System.lineSeparator());
             }
             
             int exitVal = process.waitFor();
@@ -391,4 +435,45 @@ public class mainWindow extends javax.swing.JFrame {
     private javax.swing.JTextPane thirdQuadrantTxt;
     private javax.swing.JSplitPane topSplit;
     // End of variables declaration//GEN-END:variables
+
+    private void fillProcessArray(String[] splitProcessInfo) {
+        int numLinhas = splitProcessInfo.length/12, coluna = 0;
+        for(int i = 0; i<numLinhas;i++){
+            int j = i+ coluna;
+            ProcessInfo pi = new ProcessInfo(splitProcessInfo[j+1],splitProcessInfo[j+2],splitProcessInfo[j+3],splitProcessInfo[j+4],splitProcessInfo[j+5],splitProcessInfo[j+6],splitProcessInfo[j+7],
+            splitProcessInfo[j+8],splitProcessInfo[j+9],splitProcessInfo[j+10],splitProcessInfo[j+11],splitProcessInfo[j+12]);
+            processArray.add(pi);
+            coluna+=11;
+        }    
+    }
+    private void rewriteProcessArray(String[] splitProcessInfo){
+        for(int i=0;i<processArray.size();i++){
+            for(int j = 0; j<splitProcessInfo.length;j+=11){
+                processArray.get(i).setPid(splitProcessInfo[1]);
+                processArray.get(i).setUser(splitProcessInfo[2]);
+                processArray.get(i).setPriority(splitProcessInfo[3]);
+                processArray.get(i).setNice(splitProcessInfo[4]);
+                processArray.get(i).setVirtual(splitProcessInfo[5]);
+                processArray.get(i).setResident(splitProcessInfo[6]);
+                processArray.get(i).setShared(splitProcessInfo[7]);
+                processArray.get(i).setStatus(splitProcessInfo[8]);
+                processArray.get(i).setCpu(splitProcessInfo[9]);
+                processArray.get(i).setMem(splitProcessInfo[10]);
+                processArray.get(i).setTime(splitProcessInfo[11]);
+                processArray.get(i).setCommand(splitProcessInfo[12]);
+            }
+        }
+    }
+
+    private void rewriteMemoryInfo(String[] splitMemoryInfo) {
+        memory.setTotalMemory(splitMemoryInfo[1]);
+        memory.setAvailableMemory(splitMemoryInfo[2]);
+        memory.setFreeMemory(splitMemoryInfo[3]);
+        memory.setUsedMemory(splitMemoryInfo[4]);
+        memory.setChachedMemory(splitMemoryInfo[5]);
+        memory.setSharedMemory(splitMemoryInfo[6]);
+        memory.setTotalSwap(splitMemoryInfo[8]);
+        memory.setUsedSwap(splitMemoryInfo[9]);
+        memory.setFreeSwap(splitMemoryInfo[10]);
+    }
 }

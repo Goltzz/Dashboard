@@ -124,6 +124,7 @@
                 <StringItem index="3" value="Sist. de Arquivos"/>
               </StringArray>
             </Property>
+            <Property name="selectedIndex" type="int" value="-1"/>
           </Properties>
           <Events>
             <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="firstQuadrantBoxItemStateChanged"/>
@@ -145,7 +146,7 @@
                 <StringItem index="3" value="Sist. de Arquivos"/>
               </StringArray>
             </Property>
-            <Property name="selectedIndex" type="int" value="1"/>
+            <Property name="selectedIndex" type="int" value="-1"/>
           </Properties>
           <Events>
             <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="secondQuadrantBoxItemStateChanged"/>
@@ -167,7 +168,7 @@
                 <StringItem index="3" value="Sist. de Arquivos"/>
               </StringArray>
             </Property>
-            <Property name="selectedIndex" type="int" value="2"/>
+            <Property name="selectedIndex" type="int" value="-1"/>
           </Properties>
           <Events>
             <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="thirdQuadrantBoxItemStateChanged"/>
@@ -189,7 +190,7 @@
                 <StringItem index="3" value="Sist. de Arquivos"/>
               </StringArray>
             </Property>
-            <Property name="selectedIndex" type="int" value="3"/>
+            <Property name="selectedIndex" type="int" value="-1"/>
           </Properties>
           <Events>
             <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="fourthQuadrantBoxItemStateChanged"/>
@@ -265,6 +266,7 @@
     </Container>
     <Container class="javax.swing.JSplitPane" name="topSplit">
       <Properties>
+        <Property name="dividerLocation" type="int" value="571"/>
         <Property name="dividerSize" type="int" value="2"/>
       </Properties>
       <Constraints>
