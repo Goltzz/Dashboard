@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.*;
 
 /**
  *
@@ -24,6 +25,67 @@ public class mainWindow extends javax.swing.JFrame {
     private String formatInfo;
     private ArrayList<ProcessInfo> processArray = new ArrayList<>();
     private Memory memory;
+    Timer t1 = new Timer();
+    Timer t2 = new Timer();
+    Timer t3 = new Timer();
+    Timer t4 = new Timer();
+    TimerTask tt1process = new TimerTask(){
+        @Override
+        public void run(){
+            prepareProcessInfo();
+            firstQuadrantTxt.setText(processInfo);
+        }
+    };
+    TimerTask tt1memory = new TimerTask(){
+        @Override
+        public void run(){
+            prepareMemoryInfo();
+            firstQuadrantTxt.setText(memoryInfo);
+        }
+    };
+    TimerTask tt2process = new TimerTask(){
+        @Override
+        public void run(){
+            prepareProcessInfo();
+            secondQuadrantTxt.setText(processInfo);
+        }
+    };
+    TimerTask tt2memory = new TimerTask(){
+        @Override
+        public void run(){
+            prepareMemoryInfo();
+            secondQuadrantTxt.setText(memoryInfo);
+        }
+    };
+    TimerTask tt3process = new TimerTask(){
+        @Override
+        public void run(){
+            prepareProcessInfo();
+            thirdQuadrantTxt.setText(processInfo);
+        }
+    };
+    TimerTask tt3memory = new TimerTask(){
+        @Override
+        public void run(){
+            prepareMemoryInfo();
+            thirdQuadrantTxt.setText(memoryInfo);
+        }
+    };
+    TimerTask tt4process = new TimerTask(){
+        @Override
+        public void run(){
+            prepareProcessInfo();
+            fourthQuadrantTxt.setText(processInfo);
+        }
+    };
+    TimerTask tt4memory = new TimerTask(){
+        @Override
+        public void run(){
+            prepareMemoryInfo();
+            fourthQuadrantTxt.setText(memoryInfo);
+        }
+    };
+    
     
     public mainWindow() {
         initComponents();
@@ -247,7 +309,7 @@ public class mainWindow extends javax.swing.JFrame {
     
     private void commandLineButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_commandLineButtonActionPerformed
         try{
-            Process p = Runtime.getRuntime().exec("cmd /c start cmd.exe");//trocar para abrir linha do linux
+            Process p = Runtime.getRuntime().exec("/lucas/bin/x-terminal-emulator");//trocar para abrir linha do linux
             p.waitFor();
         }catch(IOException ex){
             ex.printStackTrace();
@@ -258,6 +320,23 @@ public class mainWindow extends javax.swing.JFrame {
 
     private void firstQuadrantBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_firstQuadrantBoxItemStateChanged
         int index = firstQuadrantBox.getSelectedIndex();
+        tt1process.cancel();
+        tt1memory.cancel();
+        t1.purge();
+        tt1process = new TimerTask(){
+            @Override
+            public void run(){
+                prepareProcessInfo();
+                firstQuadrantTxt.setText(processInfo);
+            }
+        };
+        tt1memory = new TimerTask(){
+            @Override
+            public void run(){
+                prepareMemoryInfo();
+                firstQuadrantTxt.setText(memoryInfo);
+            }
+        };
         switch (index) {
             case 0 -> {
                 prepareHardwareInfo();
@@ -265,13 +344,15 @@ public class mainWindow extends javax.swing.JFrame {
             }
             case 1 -> {
                 //fazer a thread (timer) aqui e em todos as outras chamadas de prepareProcessInfo();
-                prepareProcessInfo();
-                firstQuadrantTxt.setText(processInfo);
+                t1.schedule(tt1process,new Date(),500);
+                //prepareProcessInfo();
+                //firstQuadrantTxt.setText(processInfo);
             }
             case 2 -> {
                 //fazer a thread (timer) aqui e em todos as outras chamadas de prepareMemoryInfo() que estão nas funções que tratam de cada quadrante;
-                prepareMemoryInfo();
-                firstQuadrantTxt.setText(memoryInfo);
+                t1.schedule(tt1memory,new Date(),500);
+                //prepareMemoryInfo();
+                //firstQuadrantTxt.setText(memoryInfo);
             }
             case 3 -> {
                 prepareFileInfo();
@@ -284,18 +365,37 @@ public class mainWindow extends javax.swing.JFrame {
 
     private void secondQuadrantBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_secondQuadrantBoxItemStateChanged
         int index = secondQuadrantBox.getSelectedIndex();
+        tt2process.cancel();
+        tt2memory.cancel();
+        t2.purge();
+        tt2process = new TimerTask(){
+            @Override
+            public void run(){
+                prepareProcessInfo();
+                secondQuadrantTxt.setText(processInfo);
+            }
+        };
+        tt2memory = new TimerTask(){
+            @Override
+            public void run(){
+                prepareMemoryInfo();
+                secondQuadrantTxt.setText(memoryInfo);
+            }
+        };
         switch (index) {
             case 0 -> {
                 prepareHardwareInfo();
                 secondQuadrantTxt.setText(hardwareInfo);
             }
             case 1 -> {
-                prepareProcessInfo();
-                secondQuadrantTxt.setText(processInfo);
+                t2.schedule(tt2process,new Date(),500);
+                //prepareProcessInfo();
+                //secondQuadrantTxt.setText(processInfo);
             }
             case 2 -> {
-                prepareMemoryInfo();
-                secondQuadrantTxt.setText(memoryInfo);
+                t2.schedule(tt2memory,new Date(),500);
+                //prepareMemoryInfo();
+                //secondQuadrantTxt.setText(memoryInfo);
             }
             case 3 -> {
                 prepareFileInfo();
@@ -308,18 +408,37 @@ public class mainWindow extends javax.swing.JFrame {
 
     private void thirdQuadrantBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_thirdQuadrantBoxItemStateChanged
         int index = thirdQuadrantBox.getSelectedIndex();
+        tt3process.cancel();
+        tt3memory.cancel();
+        t3.purge();
+        tt3process = new TimerTask(){
+            @Override
+            public void run(){
+                prepareProcessInfo();
+                thirdQuadrantTxt.setText(processInfo);
+            }
+        };
+        tt3memory = new TimerTask(){
+            @Override
+            public void run(){
+                prepareMemoryInfo();
+                thirdQuadrantTxt.setText(memoryInfo);
+            }
+        };
         switch (index) {
             case 0 -> {
                 prepareHardwareInfo();
                 thirdQuadrantTxt.setText(hardwareInfo);
             }
             case 1 -> {
-                prepareProcessInfo();
-                thirdQuadrantTxt.setText(processInfo);
+                t3.schedule(tt3process,new Date(),500);
+                //prepareProcessInfo();
+                //thirdQuadrantTxt.setText(processInfo);
             }
             case 2 -> {
-                prepareMemoryInfo();
-                thirdQuadrantTxt.setText(memoryInfo);
+                t3.schedule(tt3memory,new Date(),500);
+                //prepareMemoryInfo();
+                //thirdQuadrantTxt.setText(memoryInfo);
             }
             case 3 -> {
                 prepareFileInfo();
@@ -332,18 +451,37 @@ public class mainWindow extends javax.swing.JFrame {
 
     private void fourthQuadrantBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_fourthQuadrantBoxItemStateChanged
         int index = fourthQuadrantBox.getSelectedIndex();
+        tt4process.cancel();
+        tt4memory.cancel();
+        t4.purge();
+        tt4process = new TimerTask(){
+            @Override
+            public void run(){
+                prepareProcessInfo();
+                fourthQuadrantTxt.setText(processInfo);
+            }
+        };
+        tt4memory = new TimerTask(){
+            @Override
+            public void run(){
+                prepareMemoryInfo();
+                fourthQuadrantTxt.setText(memoryInfo);
+            }
+        };
         switch (index) {
             case 0 -> {
                 prepareHardwareInfo();
                 fourthQuadrantTxt.setText(hardwareInfo);
             }
             case 1 -> {
-                prepareProcessInfo();
-                fourthQuadrantTxt.setText(processInfo);
+                t4.schedule(tt4process,new Date(),500);
+                //prepareProcessInfo();
+                //fourthQuadrantTxt.setText(processInfo);
             }
             case 2 -> {
-                prepareMemoryInfo();
-                fourthQuadrantTxt.setText(memoryInfo);
+                t4.schedule(tt4memory,new Date(),500);
+                //prepareMemoryInfo();
+                //fourthQuadrantTxt.setText(memoryInfo);
             }
             case 3 -> {
                 prepareFileInfo();
