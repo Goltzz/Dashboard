@@ -261,15 +261,15 @@ public class mainWindow extends javax.swing.JFrame {
         sb.append("Memória:-----------------------------------------------------------------------------------------------\n");
         sb.append(execShellCommand("free -h"));
         sb.append("GPU:-----------------------------------------------------------------------------------------------\n");
+        String display = execShellCommand("lshw -C display");
+        display = display.substring(display.indexOf("description"), display.indexOf("capabilities"));
+        sb.append(display);
         sb.append("Discos:-----------------------------------------------------------------------------------------------\n");
         sb.append(execShellCommand("lsblk"));
         hardwareInfo = sb.toString();
     }
     
     private void prepareProcessInfo(){
-        if(processInfo != null){
-            processInfo = " ";
-        }
         processInfo = execShellCommand("top -b -n 1");
         processInfo = processInfo.substring(processInfo.indexOf("PID"));
         processInfo = processInfo.substring(processInfo.indexOf("\n"));
@@ -326,6 +326,7 @@ public class mainWindow extends javax.swing.JFrame {
         tt1process = new TimerTask(){
             @Override
             public void run(){
+                t1.schedule(tt1process,new Date(),500);
                 prepareProcessInfo();
                 firstQuadrantTxt.setText(processInfo);
             }
@@ -585,21 +586,22 @@ public class mainWindow extends javax.swing.JFrame {
         }    
     }
     private void rewriteProcessArray(String[] splitProcessInfo){
+        int coluna = 0;
         for(int i=0;i<processArray.size();i++){
-            for(int j = 0; j<splitProcessInfo.length;j+=11){
-                processArray.get(i).setPid(splitProcessInfo[1]);
-                processArray.get(i).setUser(splitProcessInfo[2]);
-                processArray.get(i).setPriority(splitProcessInfo[3]);
-                processArray.get(i).setNice(splitProcessInfo[4]);
-                processArray.get(i).setVirtual(splitProcessInfo[5]);
-                processArray.get(i).setResident(splitProcessInfo[6]);
-                processArray.get(i).setShared(splitProcessInfo[7]);
-                processArray.get(i).setStatus(splitProcessInfo[8]);
-                processArray.get(i).setCpu(splitProcessInfo[9]);
-                processArray.get(i).setMem(splitProcessInfo[10]);
-                processArray.get(i).setTime(splitProcessInfo[11]);
-                processArray.get(i).setCommand(splitProcessInfo[12]);
-            }
+                int j = i+ coluna;
+                processArray.get(i).setPid(splitProcessInfo[j+1]);
+                processArray.get(i).setUser(splitProcessInfo[j+2]);
+                processArray.get(i).setPriority(splitProcessInfo[j+3]);
+                processArray.get(i).setNice(splitProcessInfo[j+4]);
+                processArray.get(i).setVirtual(splitProcessInfo[j+5]);
+                processArray.get(i).setResident(splitProcessInfo[j+6]);
+                processArray.get(i).setShared(splitProcessInfo[j+7]);
+                processArray.get(i).setStatus(splitProcessInfo[j+8]);
+                processArray.get(i).setCpu(splitProcessInfo[j+9]);
+                processArray.get(i).setMem(splitProcessInfo[j+10]);
+                processArray.get(i).setTime(splitProcessInfo[j+11]);
+                processArray.get(i).setCommand(splitProcessInfo[j+12]);
+                coluna += 11;
         }
     }
 
