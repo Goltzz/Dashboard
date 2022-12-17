@@ -1,9 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
+
 package dashboard;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -11,6 +10,8 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.*;
+import org.jfree.chart.ChartPanel;
+import org.jfree.data.category.DefaultCategoryDataset;
 
 /**
  *
@@ -22,13 +23,15 @@ public class mainWindow extends javax.swing.JFrame {
     private String memoryInfo;
     private String hardwareInfo;
     private String fileInfo;
-    private String formatInfo;
     private ArrayList<ProcessInfo> processArray = new ArrayList<>();
     private Memory memory;
+    private BarChart memoryChart;
+    DefaultCategoryDataset dataSet = new DefaultCategoryDataset();
     Timer t1 = new Timer();
     Timer t2 = new Timer();
     Timer t3 = new Timer();
     Timer t4 = new Timer();
+    
     TimerTask tt1process = new TimerTask(){
         @Override
         public void run(){
@@ -82,7 +85,8 @@ public class mainWindow extends javax.swing.JFrame {
         @Override
         public void run(){
             prepareMemoryInfo();
-            fourthQuadrantTxt.setText(memoryInfo);
+            fourthQuadrantTxt.setVisible(false);
+            //fourthQuadrantTxt.setText(memoryInfo);
         }
     };
     
@@ -93,6 +97,7 @@ public class mainWindow extends javax.swing.JFrame {
         memoryInfo = new String();
         hardwareInfo = new String();
         fileInfo = new String();
+        memoryChart = new BarChart("Memória RAM","X","Y");
     }
 
     @SuppressWarnings("unchecked")
@@ -100,22 +105,30 @@ public class mainWindow extends javax.swing.JFrame {
     private void initComponents() {
 
         jFrame1 = new javax.swing.JFrame();
+        jPanel2 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         commandLineButton = new javax.swing.JButton();
         firstQuadrantBox = new javax.swing.JComboBox<>();
         secondQuadrantBox = new javax.swing.JComboBox<>();
         thirdQuadrantBox = new javax.swing.JComboBox<>();
         fourthQuadrantBox = new javax.swing.JComboBox<>();
-        bottomSplit = new javax.swing.JSplitPane();
-        jScrollPane7 = new javax.swing.JScrollPane();
+        jPanel4 = new javax.swing.JPanel();
+        thirdTabbedPane = new javax.swing.JTabbedPane();
+        thirdScroll = new javax.swing.JScrollPane();
         thirdQuadrantTxt = new javax.swing.JTextPane();
-        jScrollPane5 = new javax.swing.JScrollPane();
-        fourthQuadrantTxt = new javax.swing.JTextPane();
-        topSplit = new javax.swing.JSplitPane();
-        jScrollPane8 = new javax.swing.JScrollPane();
-        secondQuadrantTxt = new javax.swing.JTextPane();
-        jScrollPane6 = new javax.swing.JScrollPane();
+        thirdPanel = new javax.swing.JPanel();
+        firstTabbedPane = new javax.swing.JTabbedPane();
+        firstScroll = new javax.swing.JScrollPane();
         firstQuadrantTxt = new javax.swing.JTextPane();
+        firstPanel = new javax.swing.JPanel();
+        secondTabbedPane = new javax.swing.JTabbedPane();
+        secondScroll = new javax.swing.JScrollPane();
+        secondQuadrantTxt = new javax.swing.JTextPane();
+        secondPanel = new javax.swing.JPanel();
+        fourthTabbedPane = new javax.swing.JTabbedPane();
+        fourthScroll = new javax.swing.JScrollPane();
+        fourthQuadrantTxt = new javax.swing.JTextPane();
+        fourthPanel = new javax.swing.JPanel();
 
         javax.swing.GroupLayout jFrame1Layout = new javax.swing.GroupLayout(jFrame1.getContentPane());
         jFrame1.getContentPane().setLayout(jFrame1Layout);
@@ -131,6 +144,21 @@ public class mainWindow extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel2.setBackground(new java.awt.Color(37, 150, 190));
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1320, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 40, Short.MAX_VALUE)
+        );
+
+        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1320, 40));
 
         jPanel1.setBackground(new java.awt.Color(37, 150, 190));
         jPanel1.setPreferredSize(new java.awt.Dimension(180, 860));
@@ -190,10 +218,10 @@ public class mainWindow extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(commandLineButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(firstQuadrantBox, 0, 168, Short.MAX_VALUE)
-                    .addComponent(secondQuadrantBox, javax.swing.GroupLayout.Alignment.TRAILING, 0, 0, Short.MAX_VALUE)
-                    .addComponent(thirdQuadrantBox, 0, 0, Short.MAX_VALUE)
-                    .addComponent(fourthQuadrantBox, 0, 0, Short.MAX_VALUE))
+                    .addComponent(secondQuadrantBox, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(thirdQuadrantBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(fourthQuadrantBox, 0, 0, Short.MAX_VALUE)
+                    .addComponent(firstQuadrantBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -214,43 +242,127 @@ public class mainWindow extends javax.swing.JFrame {
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
-        bottomSplit.setDividerLocation(571);
-        bottomSplit.setDividerSize(2);
+        jPanel4.setBackground(new java.awt.Color(37, 150, 190));
 
-        jScrollPane7.setPreferredSize(new java.awt.Dimension(570, 430));
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1320, Short.MAX_VALUE)
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 40, Short.MAX_VALUE)
+        );
+
+        getContentPane().add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 820, 1320, 40));
+
+        thirdTabbedPane.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
+        thirdTabbedPane.setTabPlacement(javax.swing.JTabbedPane.BOTTOM);
+        thirdTabbedPane.setFocusable(false);
+
+        thirdScroll.setPreferredSize(new java.awt.Dimension(571, 410));
 
         thirdQuadrantTxt.setEditable(false);
-        jScrollPane7.setViewportView(thirdQuadrantTxt);
+        thirdQuadrantTxt.setFocusable(false);
+        thirdScroll.setViewportView(thirdQuadrantTxt);
 
-        bottomSplit.setLeftComponent(jScrollPane7);
+        thirdTabbedPane.addTab("tab2", thirdScroll);
 
-        jScrollPane5.setPreferredSize(new java.awt.Dimension(570, 430));
+        thirdPanel.setPreferredSize(new java.awt.Dimension(571, 430));
 
-        fourthQuadrantTxt.setEditable(false);
-        jScrollPane5.setViewportView(fourthQuadrantTxt);
+        javax.swing.GroupLayout thirdPanelLayout = new javax.swing.GroupLayout(thirdPanel);
+        thirdPanel.setLayout(thirdPanelLayout);
+        thirdPanelLayout.setHorizontalGroup(
+            thirdPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 570, Short.MAX_VALUE)
+        );
+        thirdPanelLayout.setVerticalGroup(
+            thirdPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 390, Short.MAX_VALUE)
+        );
 
-        bottomSplit.setRightComponent(jScrollPane5);
+        thirdTabbedPane.addTab("tab1", thirdPanel);
 
-        getContentPane().add(bottomSplit, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 430, 1140, 430));
+        getContentPane().add(thirdTabbedPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 431, 570, 421));
 
-        topSplit.setDividerLocation(571);
-        topSplit.setDividerSize(2);
+        firstTabbedPane.setToolTipText("");
+        firstTabbedPane.setFocusable(false);
+        firstTabbedPane.setPreferredSize(new java.awt.Dimension(571, 430));
 
-        jScrollPane8.setPreferredSize(new java.awt.Dimension(570, 430));
-
-        secondQuadrantTxt.setEditable(false);
-        jScrollPane8.setViewportView(secondQuadrantTxt);
-
-        topSplit.setRightComponent(jScrollPane8);
-
-        jScrollPane6.setPreferredSize(new java.awt.Dimension(570, 430));
+        firstScroll.setPreferredSize(new java.awt.Dimension(570, 430));
+        firstScroll.setRequestFocusEnabled(false);
 
         firstQuadrantTxt.setEditable(false);
-        jScrollPane6.setViewportView(firstQuadrantTxt);
+        firstScroll.setViewportView(firstQuadrantTxt);
 
-        topSplit.setLeftComponent(jScrollPane6);
+        firstTabbedPane.addTab("tab1", firstScroll);
 
-        getContentPane().add(topSplit, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 0, -1, -1));
+        firstPanel.setPreferredSize(new java.awt.Dimension(571, 430));
+
+        javax.swing.GroupLayout firstPanelLayout = new javax.swing.GroupLayout(firstPanel);
+        firstPanel.setLayout(firstPanelLayout);
+        firstPanelLayout.setHorizontalGroup(
+            firstPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        firstPanelLayout.setVerticalGroup(
+            firstPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 389, Short.MAX_VALUE)
+        );
+
+        firstTabbedPane.addTab("tab2", firstPanel);
+
+        getContentPane().add(firstTabbedPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(179, 12, -1, 420));
+
+        secondTabbedPane.setFocusable(false);
+
+        secondQuadrantTxt.setEditable(false);
+        secondScroll.setViewportView(secondQuadrantTxt);
+
+        secondTabbedPane.addTab("tab1", secondScroll);
+
+        javax.swing.GroupLayout secondPanelLayout = new javax.swing.GroupLayout(secondPanel);
+        secondPanel.setLayout(secondPanelLayout);
+        secondPanelLayout.setHorizontalGroup(
+            secondPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 570, Short.MAX_VALUE)
+        );
+        secondPanelLayout.setVerticalGroup(
+            secondPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 389, Short.MAX_VALUE)
+        );
+
+        secondTabbedPane.addTab("tab2", secondPanel);
+
+        getContentPane().add(secondTabbedPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 11, 570, 420));
+
+        fourthTabbedPane.setTabPlacement(javax.swing.JTabbedPane.BOTTOM);
+        fourthTabbedPane.setFocusable(false);
+
+        fourthScroll.setPreferredSize(new java.awt.Dimension(571, 430));
+
+        fourthQuadrantTxt.setEditable(false);
+        fourthScroll.setViewportView(fourthQuadrantTxt);
+
+        fourthTabbedPane.addTab("tab2", fourthScroll);
+
+        fourthPanel.setPreferredSize(new java.awt.Dimension(571, 430));
+
+        javax.swing.GroupLayout fourthPanelLayout = new javax.swing.GroupLayout(fourthPanel);
+        fourthPanel.setLayout(fourthPanelLayout);
+        fourthPanelLayout.setHorizontalGroup(
+            fourthPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 570, Short.MAX_VALUE)
+        );
+        fourthPanelLayout.setVerticalGroup(
+            fourthPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 389, Short.MAX_VALUE)
+        );
+
+        fourthTabbedPane.addTab("tab1", fourthPanel);
+
+        getContentPane().add(fourthTabbedPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 431, 570, 420));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -289,15 +401,20 @@ public class mainWindow extends javax.swing.JFrame {
     }
     
     private void prepareMemoryInfo(){
-        memoryInfo = execShellCommand("free -h");
+        memoryInfo = execShellCommand("free");
         memoryInfo = memoryInfo.substring(memoryInfo.indexOf("Mem:"));
         String[] splitMemoryInfo = memoryInfo.split("\\s+");
         StringBuilder sb = new StringBuilder(String.format("\t%-10s %-10s %-10s %-20s %-20s %-10s","TOTAL","USADA","LIVRE","COMPARTILHADA","BUFF/CACHE","DISPONÍVEL"));
         if(memory != null){
             rewriteMemoryInfo(splitMemoryInfo);
+            dataSet.setValue(Integer.valueOf(memory.getTotalMemory()),"Total","testando");
         }else{
             memory = new Memory(splitMemoryInfo[1],splitMemoryInfo[2],splitMemoryInfo[3],splitMemoryInfo[4],splitMemoryInfo[5],splitMemoryInfo[6],splitMemoryInfo[8],
                                 splitMemoryInfo[9],splitMemoryInfo[10]);
+            dataSet.addValue(Integer.valueOf(memory.getTotalMemory()), "Total","testando1");
+            dataSet.addValue(Integer.valueOf(memory.getFreeMemory()), "Livre","testando2");
+            memoryChart.setDataSet(dataSet);
+            memoryChart.createChart();
         }
         memory.formatMemLine(sb);
         memoryInfo = sb.toString();
@@ -335,27 +452,32 @@ public class mainWindow extends javax.swing.JFrame {
             @Override
             public void run(){
                 prepareMemoryInfo();
-                firstQuadrantTxt.setText(memoryInfo);
+                ChartPanel myChart = new ChartPanel(memoryChart.getBarChart());
+                myChart.setPreferredSize(new Dimension(570,430));
+                firstPanel.removeAll();
+                firstPanel.add(myChart);
+                firstPanel.validate();
             }
         };
         switch (index) {
             case 0 -> {
                 prepareHardwareInfo();
+                firstTabbedPane.setSelectedIndex(0);
                 firstQuadrantTxt.setText(hardwareInfo);
             }
             case 1 -> {
-                //fazer a thread (timer) aqui e em todos as outras chamadas de prepareProcessInfo();
+                firstTabbedPane.setSelectedIndex(0);
                 t1.schedule(tt1process,new Date(),500);
-                //prepareProcessInfo();
-                //firstQuadrantTxt.setText(processInfo);
             }
             case 2 -> {
                 //fazer a thread (timer) aqui e em todos as outras chamadas de prepareMemoryInfo() que estão nas funções que tratam de cada quadrante;
+                firstTabbedPane.setSelectedIndex(1);
                 t1.schedule(tt1memory,new Date(),500);
                 //prepareMemoryInfo();
                 //firstQuadrantTxt.setText(memoryInfo);
             }
             case 3 -> {
+                firstTabbedPane.setSelectedIndex(0);
                 prepareFileInfo();
                 firstQuadrantTxt.setText(fileInfo);
             }
@@ -380,25 +502,33 @@ public class mainWindow extends javax.swing.JFrame {
             @Override
             public void run(){
                 prepareMemoryInfo();
-                secondQuadrantTxt.setText(memoryInfo);
+                ChartPanel myChart = new ChartPanel(memoryChart.getBarChart());
+                myChart.setPreferredSize(new Dimension(570,430));
+                secondPanel.removeAll();
+                secondPanel.add(myChart);
+                secondPanel.validate();
+                //secondQuadrantTxt.setText(memoryInfo);
             }
         };
         switch (index) {
             case 0 -> {
                 prepareHardwareInfo();
+                secondTabbedPane.setSelectedIndex(0);
                 secondQuadrantTxt.setText(hardwareInfo);
             }
             case 1 -> {
+                secondTabbedPane.setSelectedIndex(0);
                 t2.schedule(tt2process,new Date(),500);
                 //prepareProcessInfo();
                 //secondQuadrantTxt.setText(processInfo);
             }
             case 2 -> {
+                secondTabbedPane.setSelectedIndex(1);
                 t2.schedule(tt2memory,new Date(),500);
-                //prepareMemoryInfo();
-                //secondQuadrantTxt.setText(memoryInfo);
+                
             }
             case 3 -> {
+                secondTabbedPane.setSelectedIndex(0);
                 prepareFileInfo();
                 secondQuadrantTxt.setText(fileInfo);
             }
@@ -428,20 +558,24 @@ public class mainWindow extends javax.swing.JFrame {
         };
         switch (index) {
             case 0 -> {
+                thirdTabbedPane.setSelectedIndex(0);
                 prepareHardwareInfo();
                 thirdQuadrantTxt.setText(hardwareInfo);
             }
             case 1 -> {
+                thirdTabbedPane.setSelectedIndex(0);
                 t3.schedule(tt3process,new Date(),500);
                 //prepareProcessInfo();
                 //thirdQuadrantTxt.setText(processInfo);
             }
             case 2 -> {
+                thirdTabbedPane.setSelectedIndex(1);
                 t3.schedule(tt3memory,new Date(),500);
                 //prepareMemoryInfo();
                 //thirdQuadrantTxt.setText(memoryInfo);
             }
             case 3 -> {
+                thirdTabbedPane.setSelectedIndex(0);
                 prepareFileInfo();
                 thirdQuadrantTxt.setText(fileInfo);
             }
@@ -471,20 +605,24 @@ public class mainWindow extends javax.swing.JFrame {
         };
         switch (index) {
             case 0 -> {
+                fourthTabbedPane.setSelectedIndex(0);
                 prepareHardwareInfo();
                 fourthQuadrantTxt.setText(hardwareInfo);
             }
             case 1 -> {
+                fourthTabbedPane.setSelectedIndex(0);
                 t4.schedule(tt4process,new Date(),500);
                 //prepareProcessInfo();
                 //fourthQuadrantTxt.setText(processInfo);
             }
             case 2 -> {
+                fourthTabbedPane.setSelectedIndex(1);
                 t4.schedule(tt4memory,new Date(),500);
                 //prepareMemoryInfo();
                 //fourthQuadrantTxt.setText(memoryInfo);
             }
             case 3 -> {
+                fourthTabbedPane.setSelectedIndex(0);
                 prepareFileInfo();
                 fourthQuadrantTxt.setText(fileInfo);
             }
@@ -519,9 +657,7 @@ public class mainWindow extends javax.swing.JFrame {
 	}
         return "Erro!Não foi possível executar o comando desejado!";
     }
-    /**
-     * @param args the command line arguments
-     */
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -556,23 +692,31 @@ public class mainWindow extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JSplitPane bottomSplit;
     private javax.swing.JButton commandLineButton;
+    private javax.swing.JPanel firstPanel;
     private javax.swing.JComboBox<String> firstQuadrantBox;
     private javax.swing.JTextPane firstQuadrantTxt;
+    private javax.swing.JScrollPane firstScroll;
+    private javax.swing.JTabbedPane firstTabbedPane;
+    private javax.swing.JPanel fourthPanel;
     private javax.swing.JComboBox<String> fourthQuadrantBox;
     private javax.swing.JTextPane fourthQuadrantTxt;
+    private javax.swing.JScrollPane fourthScroll;
+    private javax.swing.JTabbedPane fourthTabbedPane;
     private javax.swing.JFrame jFrame1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane5;
-    private javax.swing.JScrollPane jScrollPane6;
-    private javax.swing.JScrollPane jScrollPane7;
-    private javax.swing.JScrollPane jScrollPane8;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel secondPanel;
     private javax.swing.JComboBox<String> secondQuadrantBox;
     private javax.swing.JTextPane secondQuadrantTxt;
+    private javax.swing.JScrollPane secondScroll;
+    private javax.swing.JTabbedPane secondTabbedPane;
+    private javax.swing.JPanel thirdPanel;
     private javax.swing.JComboBox<String> thirdQuadrantBox;
     private javax.swing.JTextPane thirdQuadrantTxt;
-    private javax.swing.JSplitPane topSplit;
+    private javax.swing.JScrollPane thirdScroll;
+    private javax.swing.JTabbedPane thirdTabbedPane;
     // End of variables declaration//GEN-END:variables
 
     private void fillProcessArray(String[] splitProcessInfo) {
@@ -615,5 +759,30 @@ public class mainWindow extends javax.swing.JFrame {
         memory.setTotalSwap(splitMemoryInfo[8]);
         memory.setUsedSwap(splitMemoryInfo[9]);
         memory.setFreeSwap(splitMemoryInfo[10]);
+    }
+
+    private void addChartToPanel(int quadrant,ChartPanel cPanel) {
+        switch(quadrant){
+            case 1 -> {
+                firstPanel.removeAll();
+                firstPanel.add(cPanel,BorderLayout.CENTER);
+                firstPanel.validate();
+            }
+            case 2 -> {
+                secondPanel.removeAll();
+                secondPanel.add(cPanel,BorderLayout.CENTER);
+                secondPanel.validate();
+            }
+            case 3 -> {
+                thirdPanel.removeAll();
+                thirdPanel.add(cPanel,BorderLayout.CENTER);
+                thirdPanel.validate();
+            }
+            case 4 -> {
+                 fourthPanel.removeAll();
+                 fourthPanel.add(cPanel,BorderLayout.CENTER);
+                 fourthPanel.validate();
+            }
+        }
     }
 }
