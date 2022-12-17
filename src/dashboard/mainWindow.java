@@ -760,29 +760,4 @@ public class mainWindow extends javax.swing.JFrame {
         memory.setUsedSwap(splitMemoryInfo[9]);
         memory.setFreeSwap(splitMemoryInfo[10]);
     }
-
-    private void addChartToPanel(int quadrant,ChartPanel cPanel) {
-        switch(quadrant){
-            case 1 -> {
-                firstPanel.removeAll();
-                firstPanel.add(cPanel,BorderLayout.CENTER);
-                firstPanel.validate();
-            }
-            case 2 -> {
-                secondPanel.removeAll();
-                secondPanel.add(cPanel,BorderLayout.CENTER);
-                secondPanel.validate();
-            }
-            case 3 -> {
-                thirdPanel.removeAll();
-                thirdPanel.add(cPanel,BorderLayout.CENTER);
-                thirdPanel.validate();
-            }
-            case 4 -> {
-                 fourthPanel.removeAll();
-                 fourthPanel.add(cPanel,BorderLayout.CENTER);
-                 fourthPanel.validate();
-            }
-        }
-    }
 }
