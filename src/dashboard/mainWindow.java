@@ -1,7 +1,6 @@
 
 package dashboard;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,6 +9,8 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.*;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import org.jfree.chart.ChartPanel;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
@@ -34,6 +35,8 @@ public class mainWindow extends javax.swing.JFrame {
     private Memory memory;
     private BarChart memoryChart;
     private JFreeChart diskChart;
+    private JTable processTable;
+    private final ProcessTableModel pTableModel;   
     DefaultPieDataset diskDataset = new DefaultPieDataset();
     DefaultCategoryDataset dataSet = new DefaultCategoryDataset();
     Timer t1 = new Timer();
@@ -106,6 +109,8 @@ public class mainWindow extends javax.swing.JFrame {
         memoryInfo = new String();
         hardwareInfo = new String();
         fileInfo = new String();
+        prepareDiskInfo();
+        pTableModel = new ProcessTableModel();
         memoryChart = new BarChart("Memória RAM","X","Y");
         diskChart = ChartFactory.createPieChart(      
          "Disk",   // chart title 
@@ -113,7 +118,7 @@ public class mainWindow extends javax.swing.JFrame {
          true,             // include legend   
          true, 
          false);
-        prepareDiskInfo();
+        
     }
 
     @SuppressWarnings("unchecked")
@@ -354,24 +359,28 @@ public class mainWindow extends javax.swing.JFrame {
         hardwareInfo = sb.toString();
     }
     
-    private void prepareProcessInfo(){
-        processInfo = execShellCommand("top -b -n 1");
-        processInfo = processInfo.substring(processInfo.indexOf("PID"));
-        processInfo = processInfo.substring(processInfo.indexOf("\n"));
+private void prepareProcessInfo(){
+        processInfo = execShellCommand("ps -eo pid,user,priority,nice,status,%cpu,%mem,start,time,cmd");
+        processInfo = processInfo.substring(processInfo.indexOf("\n")+1);
         String[] splitProcessInfo = processInfo.split("\\s+");
-        StringBuilder sb = new StringBuilder(String.format("%-8s %-10s %-8s %-8s %-8s %-8s %-8s %-8s %-8s %-8s %-8s %-8s","PID","USUARIO","PR","NI","VIRT","RES","SHR","S","%CPU","%MEM","TEMPO+","COMANDO"));
-        if(!processArray.isEmpty()){
-            rewriteProcessArray(splitProcessInfo);
+        int size = splitProcessInfo.length/10;
+        processTable = new JTable(pTableModel);
+        setColumnNames();
+        if(!pTableModel.getProcessArray().isEmpty()){
+            if(size > pTableModel.getRowCount()){
+                int j = splitProcessInfo.length -1;
+                pTableModel.add(new ProcessInfo(splitProcessInfo[j-9],splitProcessInfo[j-8],splitProcessInfo[j-7],splitProcessInfo[j-6],splitProcessInfo[j-5],splitProcessInfo[j-4],splitProcessInfo[j-3],
+                                splitProcessInfo[j-2],splitProcessInfo[j-1],splitProcessInfo[j]));
+            }
+            else if(size < pTableModel.getRowCount()){ 
+                removeProcess(splitProcessInfo);
+            }
+            pTableModel.update(splitProcessInfo);
         }
         else{
             fillProcessArray(splitProcessInfo);
-        }
-        for(int i=0;i< processArray.size();i++){
-            sb.append(System.lineSeparator());
-            sb.append(processArray.get(i).formatLine());
-        }
-        processInfo = sb.toString();
-    }
+        }      
+}
     
     private void prepareMemoryInfo(){
         memoryInfo = execShellCommand("free");
@@ -398,7 +407,7 @@ public class mainWindow extends javax.swing.JFrame {
         memoryInfo = sb.toString();
     }
     
-    private void prepareDiskInfo(){
+private void prepareDiskInfo(){
         diskInfo = execShellCommand("lsblk -b");
         diskInfo = diskInfo.replaceAll("└─", "");
         diskInfo = diskInfo.replaceAll("├─", "");
@@ -438,14 +447,14 @@ public class mainWindow extends javax.swing.JFrame {
         disks= new int[ndisks];
         ndisks=0;
         while(line < diskInfoLines.length){
-            if(diskInfoLines[line][5].contains("disk")){  
+            if(line<diskInfoLines.length && diskInfoLines[line][5].contains("disk")){  
                 disks[ndisks]=line;
                 ndisks++;
                 line++;
-                if(diskInfoLines[line][5].contains("part"))
+                if(line<diskInfoLines.length && diskInfoLines[line][5].contains("part"))
                 {
                     nparts++;
-                    while(diskInfoLines[line][5].contains("part")){
+                    while(line<diskInfoLines.length && diskInfoLines[line][5].contains("part")){
                         line++;
                     }
                 }
@@ -458,27 +467,22 @@ public class mainWindow extends javax.swing.JFrame {
         parts= new int[nparts];
         nparts=-1;
         while(line < diskInfoLines.length){
-            if(diskInfoLines[line][5].contains("disk")){  
+            if(line<diskInfoLines.length && diskInfoLines[line][5].contains("disk")){  
                 ndiskparts=0;
                 line++;
-                if(diskInfoLines[line][5].contains("part"))
+                if(line<diskInfoLines.length && diskInfoLines[line][5].contains("part"))
                 {
                     nparts++;
-                    while(diskInfoLines[line][5].contains("part")){
+                    while(line<diskInfoLines.length && diskInfoLines[line][5].contains("part")){
                         ndiskparts++;
                         line++;
                     }
-                    parts[nparts]=ndiskparts;
                 }
+                parts[nparts]=ndiskparts;
             }else{
                     line++;
             }
-        }
-        
-        
-        //memoryInfo = memoryInfo.substring(memoryInfo.indexOf("Mem:"));
-        //String[] splitMemoryInfo = memoryInfo.split("\\s+");
-        //StringBuilder sb = new StringBuilder(String.format("\t%-10s %-10s %-10s %-20s %-20s %-10s","TOTAL","USADA","LIVRE","COMPARTILHADA","BUFF/CACHE","DISPONÍVEL"));
+        }   
     }
     
     private void updateDiskInfo(int disk){
@@ -514,7 +518,9 @@ public class mainWindow extends javax.swing.JFrame {
             @Override
             public void run(){
                 prepareProcessInfo();
-                firstQuadrantTxt.setText(processInfo);
+                firstPanel.removeAll();
+                firstPanel.add(new JScrollPane(processTable));
+                firstPanel.validate();
             }
         };
         tt1memory = new TimerTask(){
@@ -535,8 +541,9 @@ public class mainWindow extends javax.swing.JFrame {
                 firstQuadrantTxt.setText(hardwareInfo);
             }
             case 1 -> {
-                firstTabbedPane.setSelectedIndex(0);
+                firstTabbedPane.setSelectedIndex(1);
                 t1.schedule(tt1process,new Date(),500);
+
             }
             case 2 -> {
                 //fazer a thread (timer) aqui e em todos as outras chamadas de prepareMemoryInfo() que estão nas funções que tratam de cada quadrante;
@@ -550,16 +557,14 @@ public class mainWindow extends javax.swing.JFrame {
                 prepareFileInfo();
                 firstQuadrantTxt.setText(fileInfo);
             }
-            default -> {
-                if(index>=4){
-                    firstTabbedPane.setSelectedIndex(1);
-                    updateDiskInfo(index-4);
-                    ChartPanel myChart = new ChartPanel(diskChart);
-                    myChart.setPreferredSize(new Dimension(570,430));
-                    firstPanel.removeAll();
-                    firstPanel.add(myChart);
-                    firstPanel.validate();
-                }
+            case 4 -> {
+                firstTabbedPane.setSelectedIndex(1);
+                updateDiskInfo(index - 4);
+                ChartPanel myChart = new ChartPanel(diskChart);
+                myChart.setPreferredSize(new Dimension(570, 430));
+                firstPanel.removeAll();
+                firstPanel.add(myChart);
+                firstPanel.validate();
             }
         }
     }//GEN-LAST:event_firstQuadrantBoxItemStateChanged
@@ -573,7 +578,9 @@ public class mainWindow extends javax.swing.JFrame {
             @Override
             public void run(){
                 prepareProcessInfo();
-                secondQuadrantTxt.setText(processInfo);
+                secondPanel.removeAll();
+                secondPanel.add(new JScrollPane(processTable));
+                secondPanel.validate();
             }
         };
         tt2memory = new TimerTask(){
@@ -585,7 +592,6 @@ public class mainWindow extends javax.swing.JFrame {
                 secondPanel.removeAll();
                 secondPanel.add(myChart);
                 secondPanel.validate();
-                //secondQuadrantTxt.setText(memoryInfo);
             }
         };
         switch (index) {
@@ -595,10 +601,8 @@ public class mainWindow extends javax.swing.JFrame {
                 secondQuadrantTxt.setText(hardwareInfo);
             }
             case 1 -> {
-                secondTabbedPane.setSelectedIndex(0);
+                secondTabbedPane.setSelectedIndex(1);
                 t2.schedule(tt2process,new Date(),500);
-                //prepareProcessInfo();
-                //secondQuadrantTxt.setText(processInfo);
             }
             case 2 -> {
                 secondTabbedPane.setSelectedIndex(1);
@@ -610,16 +614,14 @@ public class mainWindow extends javax.swing.JFrame {
                 prepareFileInfo();
                 secondQuadrantTxt.setText(fileInfo);
             }
-            default -> {
-                if(index>=4){
-                    secondTabbedPane.setSelectedIndex(1);
-                    updateDiskInfo(index-4);
-                    ChartPanel myChart = new ChartPanel(diskChart);
-                    myChart.setPreferredSize(new Dimension(570,430));
-                    secondPanel.removeAll();
-                    secondPanel.add(myChart);
-                    secondPanel.validate();
-                }
+            case 4 -> {
+                secondTabbedPane.setSelectedIndex(1);
+                updateDiskInfo(index - 4);
+                ChartPanel myChart = new ChartPanel(diskChart);
+                myChart.setPreferredSize(new Dimension(570, 430));
+                secondPanel.removeAll();
+                secondPanel.add(myChart);
+                secondPanel.validate();
             }
         }
     }//GEN-LAST:event_secondQuadrantBoxItemStateChanged
@@ -633,7 +635,9 @@ public class mainWindow extends javax.swing.JFrame {
             @Override
             public void run(){
                 prepareProcessInfo();
-                thirdQuadrantTxt.setText(processInfo);
+                thirdPanel.removeAll();
+                thirdPanel.add(new JScrollPane(processTable));
+                thirdPanel.validate();
             }
         };
         tt3memory = new TimerTask(){
@@ -654,7 +658,7 @@ public class mainWindow extends javax.swing.JFrame {
                 thirdQuadrantTxt.setText(hardwareInfo);
             }
             case 1 -> {
-                thirdTabbedPane.setSelectedIndex(0);
+                thirdTabbedPane.setSelectedIndex(1);
                 t3.schedule(tt3process,new Date(),500);
                 //prepareProcessInfo();
                 //thirdQuadrantTxt.setText(processInfo);
@@ -670,16 +674,14 @@ public class mainWindow extends javax.swing.JFrame {
                 prepareFileInfo();
                 thirdQuadrantTxt.setText(fileInfo);
             }
-            default -> {
-                if(index>=4){
-                    thirdTabbedPane.setSelectedIndex(1);
-                    updateDiskInfo(index-4);
-                    ChartPanel myChart = new ChartPanel(diskChart);
-                    myChart.setPreferredSize(new Dimension(570,430));
-                    thirdPanel.removeAll();
-                    thirdPanel.add(myChart);
-                    thirdPanel.validate();
-                }
+            case 4 -> {
+                thirdTabbedPane.setSelectedIndex(1);
+                updateDiskInfo(index - 4);
+                ChartPanel myChart = new ChartPanel(diskChart);
+                myChart.setPreferredSize(new Dimension(570, 430));
+                thirdPanel.removeAll();
+                thirdPanel.add(myChart);
+                thirdPanel.validate();
             }
         }
     }//GEN-LAST:event_thirdQuadrantBoxItemStateChanged
@@ -693,7 +695,9 @@ public class mainWindow extends javax.swing.JFrame {
             @Override
             public void run(){
                 prepareProcessInfo();
-                fourthQuadrantTxt.setText(processInfo);
+                fourthPanel.removeAll();
+                fourthPanel.add(new JScrollPane(processTable));
+                fourthPanel.validate();
             }
         };
         tt4memory = new TimerTask(){
@@ -714,7 +718,7 @@ public class mainWindow extends javax.swing.JFrame {
                 fourthQuadrantTxt.setText(hardwareInfo);
             }
             case 1 -> {
-                fourthTabbedPane.setSelectedIndex(0);
+                fourthTabbedPane.setSelectedIndex(1);
                 t4.schedule(tt4process,new Date(),500);
                 //prepareProcessInfo();
                 //fourthQuadrantTxt.setText(processInfo);
@@ -730,16 +734,14 @@ public class mainWindow extends javax.swing.JFrame {
                 prepareFileInfo();
                 fourthQuadrantTxt.setText(fileInfo);
             }
-            default -> {
-                if(index>=4){
-                    fourthTabbedPane.setSelectedIndex(1);
-                    updateDiskInfo(index-4);
-                    ChartPanel myChart = new ChartPanel(diskChart);
-                    myChart.setPreferredSize(new Dimension(570,430));
-                    fourthPanel.removeAll();
-                    fourthPanel.add(myChart);
-                    fourthPanel.validate();
-                }
+            case 4 -> {
+                fourthTabbedPane.setSelectedIndex(1);
+                updateDiskInfo(index - 4);
+                ChartPanel myChart = new ChartPanel(diskChart);
+                myChart.setPreferredSize(new Dimension(570, 430));
+                fourthPanel.removeAll();
+                fourthPanel.add(myChart);
+                fourthPanel.validate();
             }
         }
     }//GEN-LAST:event_fourthQuadrantBoxItemStateChanged
@@ -832,34 +834,28 @@ public class mainWindow extends javax.swing.JFrame {
     private javax.swing.JTabbedPane thirdTabbedPane;
     // End of variables declaration//GEN-END:variables
 
-    private void fillProcessArray(String[] splitProcessInfo) {
-        int numLinhas = splitProcessInfo.length/12, coluna = 0;
-        for(int i = 0; i<numLinhas;i++){
-            int j = i+ coluna;
-            ProcessInfo pi = new ProcessInfo(splitProcessInfo[j+1],splitProcessInfo[j+2],splitProcessInfo[j+3],splitProcessInfo[j+4],splitProcessInfo[j+5],splitProcessInfo[j+6],splitProcessInfo[j+7],
-            splitProcessInfo[j+8],splitProcessInfo[j+9],splitProcessInfo[j+10],splitProcessInfo[j+11],splitProcessInfo[j+12]);
-            processArray.add(pi);
-            coluna+=11;
-        }    
-    }
-    private void rewriteProcessArray(String[] splitProcessInfo){
-        int coluna = 0;
-        for(int i=0;i<processArray.size();i++){
-                int j = i+ coluna;
-                processArray.get(i).setPid(splitProcessInfo[j+1]);
-                processArray.get(i).setUser(splitProcessInfo[j+2]);
-                processArray.get(i).setPriority(splitProcessInfo[j+3]);
-                processArray.get(i).setNice(splitProcessInfo[j+4]);
-                processArray.get(i).setVirtual(splitProcessInfo[j+5]);
-                processArray.get(i).setResident(splitProcessInfo[j+6]);
-                processArray.get(i).setShared(splitProcessInfo[j+7]);
-                processArray.get(i).setStatus(splitProcessInfo[j+8]);
-                processArray.get(i).setCpu(splitProcessInfo[j+9]);
-                processArray.get(i).setMem(splitProcessInfo[j+10]);
-                processArray.get(i).setTime(splitProcessInfo[j+11]);
-                processArray.get(i).setCommand(splitProcessInfo[j+12]);
-                coluna += 11;
+    
+    private void removeProcess(String[] splitProcessInfo) {
+        int i =0, j=0;
+        while( i<pTableModel.getRowCount()){
+            String value = pTableModel.getValueAt(i, 0);
+            if(pTableModel.getValueAt(i, 0).equals(splitProcessInfo[j]))
+                pTableModel.remove(pTableModel.getProcessInfoAt(i));
+            i++;
+            j += pTableModel.getColumnCount();
         }
+    }
+
+
+    private void fillProcessArray(String[] splitProcessInfo) {
+        int numLinhas = splitProcessInfo.length/10, coluna = 0;
+        for(int i = 0; i<numLinhas;i++){
+            int j = i + coluna;
+            ProcessInfo pi = new ProcessInfo(splitProcessInfo[j],splitProcessInfo[j+1],splitProcessInfo[j+2],splitProcessInfo[j+3],splitProcessInfo[j+4],splitProcessInfo[j+5],splitProcessInfo[j+6],
+                                splitProcessInfo[j+7],splitProcessInfo[j+8],splitProcessInfo[j+9]);
+            pTableModel.add(pi);
+            coluna+=9;
+        }    
     }
 
     private void rewriteMemoryInfo(String[] splitMemoryInfo) {
@@ -872,5 +868,18 @@ public class mainWindow extends javax.swing.JFrame {
         memory.setTotalSwap(splitMemoryInfo[8]);
         memory.setUsedSwap(splitMemoryInfo[9]);
         memory.setFreeSwap(splitMemoryInfo[10]);
+    }
+
+    private void setColumnNames() {
+        processTable.getColumnModel().getColumn(0).setHeaderValue("PID");
+        processTable.getColumnModel().getColumn(1).setHeaderValue("USER");
+        processTable.getColumnModel().getColumn(2).setHeaderValue("PRIO");
+        processTable.getColumnModel().getColumn(3).setHeaderValue("NICE");
+        processTable.getColumnModel().getColumn(4).setHeaderValue("S");
+        processTable.getColumnModel().getColumn(5).setHeaderValue("%CPU");
+        processTable.getColumnModel().getColumn(6).setHeaderValue("%MEM");
+        processTable.getColumnModel().getColumn(7).setHeaderValue("START");
+        processTable.getColumnModel().getColumn(8).setHeaderValue("TIME");
+        processTable.getColumnModel().getColumn(9).setHeaderValue("CMD");
     }
 }

@@ -7,30 +7,34 @@ public class ProcessInfo {
     private String user;
     private String priority;
     private String nice;
-    private String virtual;
-    private String resident;
-    private String shared;
     private String status;
     private String cpu;
     private String mem;
     private String time;
+    private String start;
     private String command;
 
-    public ProcessInfo(String pid, String user, String priority, String nice, String virtual, String resident, String shared, String status, String cpu, String mem, String time, String command) {
+    public ProcessInfo(String pid, String user, String priority, String nice, String status, String cpu, String mem, String time,String start, String command) {
         this.pid = pid;
         this.user = user;
         this.priority = priority;
         this.nice = nice;
-        this.virtual = virtual;
-        this.resident = resident;
-        this.shared = shared;
         this.status = status;
         this.cpu = cpu;
         this.mem = mem;
+        this.start = start;
         this.time = time;
         this.command = command;
     }
 
+    public String getStart() {
+        return start;
+    }
+
+    public void setStart(String start) {
+        this.start = start;
+    }
+    
     public String getPid() {
         return pid;
     }
@@ -47,17 +51,6 @@ public class ProcessInfo {
         return nice;
     }
 
-    public String getVirtual() {
-        return virtual;
-    }
-
-    public String getResident() {
-        return resident;
-    }
-
-    public String getShared() {
-        return shared;
-    }
 
     public String getStatus() {
         return status;
@@ -95,17 +88,6 @@ public class ProcessInfo {
         this.nice = nice;
     }
 
-    public void setVirtual(String virtual) {
-        this.virtual = virtual;
-    }
-
-    public void setResident(String resident) {
-        this.resident = resident;
-    }
-
-    public void setShared(String shared) {
-        this.shared = shared;
-    }
 
     public void setStatus(String status) {
         this.status = status;
@@ -127,11 +109,6 @@ public class ProcessInfo {
         this.command = command;
     }
     
-    public String formatLine(){
-        String line;
-        line = String.format("%-13s %-17s%-11s%-8s %-10s%-10s%-12s%-12s%-10s%-12s%-12s%-12s",pid,user,priority,nice,virtual,resident,shared,status,cpu,mem,time,command);
-        return line;
-    }
     
 }
 
