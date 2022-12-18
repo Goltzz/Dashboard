@@ -12,6 +12,9 @@ import java.util.logging.Logger;
 import java.util.*;
 import org.jfree.chart.ChartPanel;
 import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.JFreeChart;
 
 /**
  *
@@ -23,9 +26,15 @@ public class mainWindow extends javax.swing.JFrame {
     private String memoryInfo;
     private String hardwareInfo;
     private String fileInfo;
+    private String diskInfo;
+    private String[][] diskInfoLines;
+    private int[] disks;
+    private int[] parts;
     private ArrayList<ProcessInfo> processArray = new ArrayList<>();
     private Memory memory;
     private BarChart memoryChart;
+    private JFreeChart diskChart;
+    DefaultPieDataset diskDataset = new DefaultPieDataset();
     DefaultCategoryDataset dataSet = new DefaultCategoryDataset();
     Timer t1 = new Timer();
     Timer t2 = new Timer();
@@ -98,6 +107,13 @@ public class mainWindow extends javax.swing.JFrame {
         hardwareInfo = new String();
         fileInfo = new String();
         memoryChart = new BarChart("Memória RAM","X","Y");
+        diskChart = ChartFactory.createPieChart(      
+         "Disk",   // chart title 
+         diskDataset,          // data    
+         true,             // include legend   
+         true, 
+         false);
+        prepareDiskInfo();
     }
 
     @SuppressWarnings("unchecked")
@@ -270,18 +286,7 @@ public class mainWindow extends javax.swing.JFrame {
         thirdTabbedPane.addTab("tab2", thirdScroll);
 
         thirdPanel.setPreferredSize(new java.awt.Dimension(571, 430));
-
-        javax.swing.GroupLayout thirdPanelLayout = new javax.swing.GroupLayout(thirdPanel);
-        thirdPanel.setLayout(thirdPanelLayout);
-        thirdPanelLayout.setHorizontalGroup(
-            thirdPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 570, Short.MAX_VALUE)
-        );
-        thirdPanelLayout.setVerticalGroup(
-            thirdPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 390, Short.MAX_VALUE)
-        );
-
+        thirdPanel.setLayout(new java.awt.BorderLayout());
         thirdTabbedPane.addTab("tab1", thirdPanel);
 
         getContentPane().add(thirdTabbedPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 431, 570, 421));
@@ -299,18 +304,7 @@ public class mainWindow extends javax.swing.JFrame {
         firstTabbedPane.addTab("tab1", firstScroll);
 
         firstPanel.setPreferredSize(new java.awt.Dimension(571, 430));
-
-        javax.swing.GroupLayout firstPanelLayout = new javax.swing.GroupLayout(firstPanel);
-        firstPanel.setLayout(firstPanelLayout);
-        firstPanelLayout.setHorizontalGroup(
-            firstPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        firstPanelLayout.setVerticalGroup(
-            firstPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 389, Short.MAX_VALUE)
-        );
-
+        firstPanel.setLayout(new java.awt.BorderLayout());
         firstTabbedPane.addTab("tab2", firstPanel);
 
         getContentPane().add(firstTabbedPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(179, 12, -1, 420));
@@ -322,17 +316,7 @@ public class mainWindow extends javax.swing.JFrame {
 
         secondTabbedPane.addTab("tab1", secondScroll);
 
-        javax.swing.GroupLayout secondPanelLayout = new javax.swing.GroupLayout(secondPanel);
-        secondPanel.setLayout(secondPanelLayout);
-        secondPanelLayout.setHorizontalGroup(
-            secondPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 570, Short.MAX_VALUE)
-        );
-        secondPanelLayout.setVerticalGroup(
-            secondPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 389, Short.MAX_VALUE)
-        );
-
+        secondPanel.setLayout(new java.awt.BorderLayout());
         secondTabbedPane.addTab("tab2", secondPanel);
 
         getContentPane().add(secondTabbedPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 11, 570, 420));
@@ -348,18 +332,7 @@ public class mainWindow extends javax.swing.JFrame {
         fourthTabbedPane.addTab("tab2", fourthScroll);
 
         fourthPanel.setPreferredSize(new java.awt.Dimension(571, 430));
-
-        javax.swing.GroupLayout fourthPanelLayout = new javax.swing.GroupLayout(fourthPanel);
-        fourthPanel.setLayout(fourthPanelLayout);
-        fourthPanelLayout.setHorizontalGroup(
-            fourthPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 570, Short.MAX_VALUE)
-        );
-        fourthPanelLayout.setVerticalGroup(
-            fourthPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 389, Short.MAX_VALUE)
-        );
-
+        fourthPanel.setLayout(new java.awt.BorderLayout());
         fourthTabbedPane.addTab("tab1", fourthPanel);
 
         getContentPane().add(fourthTabbedPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 431, 570, 420));
@@ -407,17 +380,114 @@ public class mainWindow extends javax.swing.JFrame {
         StringBuilder sb = new StringBuilder(String.format("\t%-10s %-10s %-10s %-20s %-20s %-10s","TOTAL","USADA","LIVRE","COMPARTILHADA","BUFF/CACHE","DISPONÍVEL"));
         if(memory != null){
             rewriteMemoryInfo(splitMemoryInfo);
-            dataSet.setValue(Integer.valueOf(memory.getTotalMemory()),"Total","testando");
+            dataSet.setValue(Integer.valueOf(memory.getTotalMemory()),"Total","Mem");
+            dataSet.setValue(Integer.valueOf(memory.getFreeMemory()), "Livre","Mem");
+            dataSet.setValue(Integer.valueOf(memory.getTotalSwap()), "Total","Swap");
+            dataSet.setValue(Integer.valueOf(memory.getFreeSwap()), "Livre","Swap");
         }else{
             memory = new Memory(splitMemoryInfo[1],splitMemoryInfo[2],splitMemoryInfo[3],splitMemoryInfo[4],splitMemoryInfo[5],splitMemoryInfo[6],splitMemoryInfo[8],
                                 splitMemoryInfo[9],splitMemoryInfo[10]);
-            dataSet.addValue(Integer.valueOf(memory.getTotalMemory()), "Total","testando1");
-            dataSet.addValue(Integer.valueOf(memory.getFreeMemory()), "Livre","testando2");
+            dataSet.addValue(Integer.valueOf(memory.getTotalMemory()), "Total","Mem");
+            dataSet.addValue(Integer.valueOf(memory.getFreeMemory()), "Livre","Mem");
+            dataSet.addValue(Integer.valueOf(memory.getTotalSwap()), "Total","Swap");
+            dataSet.addValue(Integer.valueOf(memory.getFreeSwap()), "Livre","Swap");
             memoryChart.setDataSet(dataSet);
             memoryChart.createChart();
         }
         memory.formatMemLine(sb);
         memoryInfo = sb.toString();
+    }
+    
+    private void prepareDiskInfo(){
+        diskInfo = execShellCommand("lsblk -b");
+        diskInfo = diskInfo.replaceAll("└─", "");
+        diskInfo = diskInfo.replaceAll("├─", "");
+        
+        Scanner scanner = new Scanner(diskInfo);
+        int sz=0;
+        int ndisks=0;
+        int nparts=0;
+        int ndiskparts=0;
+        while(scanner.hasNextLine()){
+            scanner.nextLine();
+            sz++;
+        }
+        scanner.close();
+        scanner = new Scanner(diskInfo);
+        scanner.nextLine();
+        sz--;
+
+        diskInfoLines = new String[sz][7];
+        for(int i = 0; i<sz; i ++){
+            diskInfoLines[i]=scanner.nextLine().split("\\s+");
+        }
+        
+        int line = 0;
+        while(line < diskInfoLines.length){
+            if(diskInfoLines[line][5].contains("disk")){
+                ndisks++;                
+                firstQuadrantBox.addItem("Disco " + diskInfoLines[line][0]);
+                secondQuadrantBox.addItem("Disco " + diskInfoLines[line][0]);
+                thirdQuadrantBox.addItem("Disco " + diskInfoLines[line][0]);
+                fourthQuadrantBox.addItem("Disco " + diskInfoLines[line][0]);
+            }
+            line++;
+        }
+        
+        line=0;
+        disks= new int[ndisks];
+        ndisks=0;
+        while(line < diskInfoLines.length){
+            if(diskInfoLines[line][5].contains("disk")){  
+                disks[ndisks]=line;
+                ndisks++;
+                line++;
+                if(diskInfoLines[line][5].contains("part"))
+                {
+                    nparts++;
+                    while(diskInfoLines[line][5].contains("part")){
+                        line++;
+                    }
+                }
+            }else{
+                    line++;
+            }
+        }
+        
+        line=0;
+        parts= new int[nparts];
+        nparts=-1;
+        while(line < diskInfoLines.length){
+            if(diskInfoLines[line][5].contains("disk")){  
+                ndiskparts=0;
+                line++;
+                if(diskInfoLines[line][5].contains("part"))
+                {
+                    nparts++;
+                    while(diskInfoLines[line][5].contains("part")){
+                        ndiskparts++;
+                        line++;
+                    }
+                    parts[nparts]=ndiskparts;
+                }
+            }else{
+                    line++;
+            }
+        }
+        
+        
+        //memoryInfo = memoryInfo.substring(memoryInfo.indexOf("Mem:"));
+        //String[] splitMemoryInfo = memoryInfo.split("\\s+");
+        //StringBuilder sb = new StringBuilder(String.format("\t%-10s %-10s %-10s %-20s %-20s %-10s","TOTAL","USADA","LIVRE","COMPARTILHADA","BUFF/CACHE","DISPONÍVEL"));
+    }
+    
+    private void updateDiskInfo(int disk){
+        int i = disks[disk];
+        diskChart.setTitle(diskInfoLines[i][0]);
+        diskDataset.clear();
+        for(int j=1; j<=parts[i];j++){
+            diskDataset.setValue(diskInfoLines[disks[i]+j][0], Long.valueOf(diskInfoLines[disks[i]+j][3]));
+        }
     }
     
     private void prepareFileInfo(){
@@ -426,7 +496,7 @@ public class mainWindow extends javax.swing.JFrame {
     
     private void commandLineButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_commandLineButtonActionPerformed
         try{
-            Process p = Runtime.getRuntime().exec("/lucas/bin/x-terminal-emulator");//trocar para abrir linha do linux
+            Process p = Runtime.getRuntime().exec("x-terminal-emulator");//trocar para abrir linha do linux
             p.waitFor();
         }catch(IOException ex){
             ex.printStackTrace();
@@ -443,7 +513,6 @@ public class mainWindow extends javax.swing.JFrame {
         tt1process = new TimerTask(){
             @Override
             public void run(){
-                t1.schedule(tt1process,new Date(),500);
                 prepareProcessInfo();
                 firstQuadrantTxt.setText(processInfo);
             }
@@ -482,6 +551,15 @@ public class mainWindow extends javax.swing.JFrame {
                 firstQuadrantTxt.setText(fileInfo);
             }
             default -> {
+                if(index>=4){
+                    firstTabbedPane.setSelectedIndex(1);
+                    updateDiskInfo(index-4);
+                    ChartPanel myChart = new ChartPanel(diskChart);
+                    myChart.setPreferredSize(new Dimension(570,430));
+                    firstPanel.removeAll();
+                    firstPanel.add(myChart);
+                    firstPanel.validate();
+                }
             }
         }
     }//GEN-LAST:event_firstQuadrantBoxItemStateChanged
@@ -533,6 +611,15 @@ public class mainWindow extends javax.swing.JFrame {
                 secondQuadrantTxt.setText(fileInfo);
             }
             default -> {
+                if(index>=4){
+                    secondTabbedPane.setSelectedIndex(1);
+                    updateDiskInfo(index-4);
+                    ChartPanel myChart = new ChartPanel(diskChart);
+                    myChart.setPreferredSize(new Dimension(570,430));
+                    secondPanel.removeAll();
+                    secondPanel.add(myChart);
+                    secondPanel.validate();
+                }
             }
         }
     }//GEN-LAST:event_secondQuadrantBoxItemStateChanged
@@ -553,7 +640,11 @@ public class mainWindow extends javax.swing.JFrame {
             @Override
             public void run(){
                 prepareMemoryInfo();
-                thirdQuadrantTxt.setText(memoryInfo);
+                ChartPanel myChart = new ChartPanel(memoryChart.getBarChart());
+                myChart.setPreferredSize(new Dimension(570,430));
+                thirdPanel.removeAll();
+                thirdPanel.add(myChart);
+                thirdPanel.validate();
             }
         };
         switch (index) {
@@ -580,6 +671,15 @@ public class mainWindow extends javax.swing.JFrame {
                 thirdQuadrantTxt.setText(fileInfo);
             }
             default -> {
+                if(index>=4){
+                    thirdTabbedPane.setSelectedIndex(1);
+                    updateDiskInfo(index-4);
+                    ChartPanel myChart = new ChartPanel(diskChart);
+                    myChart.setPreferredSize(new Dimension(570,430));
+                    thirdPanel.removeAll();
+                    thirdPanel.add(myChart);
+                    thirdPanel.validate();
+                }
             }
         }
     }//GEN-LAST:event_thirdQuadrantBoxItemStateChanged
@@ -600,7 +700,11 @@ public class mainWindow extends javax.swing.JFrame {
             @Override
             public void run(){
                 prepareMemoryInfo();
-                fourthQuadrantTxt.setText(memoryInfo);
+                ChartPanel myChart = new ChartPanel(memoryChart.getBarChart());
+                myChart.setPreferredSize(new Dimension(570,430));
+                fourthPanel.removeAll();
+                fourthPanel.add(myChart);
+                fourthPanel.validate();
             }
         };
         switch (index) {
@@ -627,6 +731,15 @@ public class mainWindow extends javax.swing.JFrame {
                 fourthQuadrantTxt.setText(fileInfo);
             }
             default -> {
+                if(index>=4){
+                    fourthTabbedPane.setSelectedIndex(1);
+                    updateDiskInfo(index-4);
+                    ChartPanel myChart = new ChartPanel(diskChart);
+                    myChart.setPreferredSize(new Dimension(570,430));
+                    fourthPanel.removeAll();
+                    fourthPanel.add(myChart);
+                    fourthPanel.validate();
+                }
             }
         }
     }//GEN-LAST:event_fourthQuadrantBoxItemStateChanged
