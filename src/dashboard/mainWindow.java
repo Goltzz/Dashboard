@@ -23,6 +23,7 @@ import org.jfree.chart.JFreeChart;
  */
 public class mainWindow extends javax.swing.JFrame {
 
+    private JScrollPane scroll;
     private String processInfo;
     private String memoryInfo;
     private String hardwareInfo;
@@ -111,6 +112,7 @@ public class mainWindow extends javax.swing.JFrame {
         fileInfo = new String();
         prepareDiskInfo();
         pTableModel = new ProcessTableModel();
+        processTable = new JTable(pTableModel);
         memoryChart = new BarChart("Memória RAM","X","Y");
         diskChart = ChartFactory.createPieChart(      
          "Disk",   // chart title 
@@ -273,10 +275,10 @@ public class mainWindow extends javax.swing.JFrame {
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 40, Short.MAX_VALUE)
+            .addGap(0, 38, Short.MAX_VALUE)
         );
 
-        getContentPane().add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 820, 1320, 40));
+        getContentPane().add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 822, 1320, 38));
 
         thirdTabbedPane.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
         thirdTabbedPane.setTabPlacement(javax.swing.JTabbedPane.BOTTOM);
@@ -294,7 +296,7 @@ public class mainWindow extends javax.swing.JFrame {
         thirdPanel.setLayout(new java.awt.BorderLayout());
         thirdTabbedPane.addTab("tab1", thirdPanel);
 
-        getContentPane().add(thirdTabbedPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 431, 570, 421));
+        getContentPane().add(thirdTabbedPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 431, 570, 420));
 
         firstTabbedPane.setToolTipText("");
         firstTabbedPane.setFocusable(false);
@@ -364,7 +366,6 @@ private void prepareProcessInfo(){
         processInfo = processInfo.substring(processInfo.indexOf("\n")+1);
         String[] splitProcessInfo = processInfo.split("\\s+");
         int size = splitProcessInfo.length/10;
-        processTable = new JTable(pTableModel);
         setColumnNames();
         if(!pTableModel.getProcessArray().isEmpty()){
             if(size > pTableModel.getRowCount()){
@@ -445,6 +446,7 @@ private void prepareDiskInfo(){
         
         line=0;
         disks= new int[ndisks];
+        parts= new int[ndisks];
         ndisks=0;
         while(line < diskInfoLines.length){
             if(line<diskInfoLines.length && diskInfoLines[line][5].contains("disk")){  
@@ -464,15 +466,14 @@ private void prepareDiskInfo(){
         }
         
         line=0;
-        parts= new int[nparts];
         nparts=-1;
         while(line < diskInfoLines.length){
             if(line<diskInfoLines.length && diskInfoLines[line][5].contains("disk")){  
                 ndiskparts=0;
                 line++;
+                nparts++;
                 if(line<diskInfoLines.length && diskInfoLines[line][5].contains("part"))
                 {
-                    nparts++;
                     while(line<diskInfoLines.length && diskInfoLines[line][5].contains("part")){
                         ndiskparts++;
                         line++;
@@ -482,7 +483,9 @@ private void prepareDiskInfo(){
             }else{
                     line++;
             }
-        }   
+        }
+        
+        
     }
     
     private void updateDiskInfo(int disk){
@@ -519,7 +522,7 @@ private void prepareDiskInfo(){
             public void run(){
                 prepareProcessInfo();
                 firstPanel.removeAll();
-                firstPanel.add(new JScrollPane(processTable));
+                firstPanel.add(scroll);
                 firstPanel.validate();
             }
         };
@@ -542,6 +545,7 @@ private void prepareDiskInfo(){
             }
             case 1 -> {
                 firstTabbedPane.setSelectedIndex(1);
+                scroll = new JScrollPane(processTable);
                 t1.schedule(tt1process,new Date(),500);
 
             }
@@ -579,7 +583,7 @@ private void prepareDiskInfo(){
             public void run(){
                 prepareProcessInfo();
                 secondPanel.removeAll();
-                secondPanel.add(new JScrollPane(processTable));
+                secondPanel.add(scroll);
                 secondPanel.validate();
             }
         };
@@ -602,6 +606,7 @@ private void prepareDiskInfo(){
             }
             case 1 -> {
                 secondTabbedPane.setSelectedIndex(1);
+                scroll = new JScrollPane(processTable);
                 t2.schedule(tt2process,new Date(),500);
             }
             case 2 -> {
@@ -636,7 +641,7 @@ private void prepareDiskInfo(){
             public void run(){
                 prepareProcessInfo();
                 thirdPanel.removeAll();
-                thirdPanel.add(new JScrollPane(processTable));
+                thirdPanel.add(scroll);
                 thirdPanel.validate();
             }
         };
@@ -659,6 +664,7 @@ private void prepareDiskInfo(){
             }
             case 1 -> {
                 thirdTabbedPane.setSelectedIndex(1);
+                scroll = new JScrollPane(processTable);
                 t3.schedule(tt3process,new Date(),500);
                 //prepareProcessInfo();
                 //thirdQuadrantTxt.setText(processInfo);
@@ -696,7 +702,7 @@ private void prepareDiskInfo(){
             public void run(){
                 prepareProcessInfo();
                 fourthPanel.removeAll();
-                fourthPanel.add(new JScrollPane(processTable));
+                fourthPanel.add(scroll);
                 fourthPanel.validate();
             }
         };
@@ -719,6 +725,7 @@ private void prepareDiskInfo(){
             }
             case 1 -> {
                 fourthTabbedPane.setSelectedIndex(1);
+                scroll = new JScrollPane(processTable);
                 t4.schedule(tt4process,new Date(),500);
                 //prepareProcessInfo();
                 //fourthQuadrantTxt.setText(processInfo);
