@@ -28,21 +28,19 @@ public class ProcessTableModel extends AbstractTableModel {
         }
     }
     
-    public void update(String[] splitProcessInfo) {
+    public void update(String[][] splitProcessInfo) {
         int coluna = 0;
         for(int row = 0; row < processArray.size();row++){
-            int j = row + coluna;
-            processArray.get(row).setPid(splitProcessInfo[j]);
-            processArray.get(row).setUser(splitProcessInfo[j+1]);
-            processArray.get(row).setPriority(splitProcessInfo[j+2]);
-            processArray.get(row).setNice(splitProcessInfo[j+3]);
-            processArray.get(row).setStatus(splitProcessInfo[j+4]);
-            processArray.get(row).setCpu(splitProcessInfo[j+5]);
-            processArray.get(row).setMem(splitProcessInfo[j+6]);
-            processArray.get(row).setStart(splitProcessInfo[j+7]);
-            processArray.get(row).setTime(splitProcessInfo[j+8]);
-            processArray.get(row).setCommand(splitProcessInfo[j+9]);
-            coluna += COLUMN_NAMES.length-1;
+            processArray.get(row).setPid(splitProcessInfo[row][0]);
+            processArray.get(row).setUser(splitProcessInfo[row][1]);
+            processArray.get(row).setPriority(splitProcessInfo[row][2]);
+            processArray.get(row).setNice(splitProcessInfo[row][3]);
+            processArray.get(row).setStatus(splitProcessInfo[row][4]);
+            processArray.get(row).setCpu(splitProcessInfo[row][5]);
+            processArray.get(row).setMem(splitProcessInfo[row][6]);
+            processArray.get(row).setStart(splitProcessInfo[row][7]);
+            processArray.get(row).setTime(splitProcessInfo[row][8]);
+            processArray.get(row).setCommand(splitProcessInfo[row][9]);
         }
     }
 

@@ -112,6 +112,7 @@ public class mainWindow extends javax.swing.JFrame {
         fileInfo = new String();
         prepareDiskInfo();
         pTableModel = new ProcessTableModel();
+        processTable = new JTable(pTableModel);
         memoryChart = new BarChart("Memória RAM","X","Y");
         diskChart = ChartFactory.createPieChart(      
          "Disk",   // chart title 
@@ -360,28 +361,52 @@ public class mainWindow extends javax.swing.JFrame {
         hardwareInfo = sb.toString();
     }
     
-private void prepareProcessInfo(){
-        processInfo = execShellCommand("ps -eo pid,user,priority,nice,status,%cpu,%mem,start,time,cmd");
-        processInfo = processInfo.substring(processInfo.indexOf("\n")+1);
-        String[] splitProcessInfo = processInfo.split("\\s+");
-        int size = splitProcessInfo.length/10;
-        processTable = new JTable(pTableModel);
-        setColumnNames();
-        if(!pTableModel.getProcessArray().isEmpty()){
-            if(size > pTableModel.getRowCount()){
-                int j = splitProcessInfo.length -1;
-                pTableModel.add(new ProcessInfo(splitProcessInfo[j-9],splitProcessInfo[j-8],splitProcessInfo[j-7],splitProcessInfo[j-6],splitProcessInfo[j-5],splitProcessInfo[j-4],splitProcessInfo[j-3],
-                                splitProcessInfo[j-2],splitProcessInfo[j-1],splitProcessInfo[j]));
+    private void prepareProcessInfo(){
+            processInfo = execShellCommand("ps -eo pid,user,priority,nice,status,%cpu,%mem,start,time,cmd");
+            processInfo = processInfo.substring(processInfo.indexOf("\n")+1);
+            String[] lineProcessInfo = processInfo.split("\n");
+            String[][] splitProcessInfo = new String[lineProcessInfo.length][10];
+            for(int i=0;i<lineProcessInfo.length;i++){
+                splitProcessInfo[i] = lineProcessInfo[i].split("\\s+");
             }
-            else if(size < pTableModel.getRowCount()){ 
-                removeProcess(splitProcessInfo);
+            int size = splitProcessInfo.length;
+            setColumnNames();
+            if(!pTableModel.getProcessArray().isEmpty()){
+                if(size > pTableModel.getRowCount()){
+                    int j = splitProcessInfo.length -1;
+                        pTableModel.add(new ProcessInfo(splitProcessInfo[j][0],splitProcessInfo[j][1],splitProcessInfo[j][2],splitProcessInfo[j][3],splitProcessInfo[j][4],splitProcessInfo[j][5],splitProcessInfo[j][6],
+                                    splitProcessInfo[j][7],splitProcessInfo[j][8],splitProcessInfo[j][9]));
+
+                }
+                else if(size < pTableModel.getRowCount()){ 
+                    removeProcess(splitProcessInfo);
+                }
+                pTableModel.update(splitProcessInfo);
             }
-            pTableModel.update(splitProcessInfo);
+            else{
+                fillProcessArray(splitProcessInfo);
+            }
+            //processTable.setModel(pTableModel);
+    }
+    
+    private void removeProcess(String[][] splitProcessInfo) {
+        int i =0, j=0;
+        while( i<pTableModel.getRowCount()){
+            String value = pTableModel.getValueAt(i, 0);
+            if(!pTableModel.getValueAt(i, 0).equals(splitProcessInfo[i][0]))
+                pTableModel.remove(pTableModel.getProcessInfoAt(i));
+            i++;
         }
-        else{
-            fillProcessArray(splitProcessInfo);
-        }      
-}
+    }
+    
+    private void fillProcessArray(String[][] splitProcessInfo) {
+        int numLinhas = splitProcessInfo.length;
+        for(int i = 0; i<numLinhas;i++){
+            ProcessInfo pi = new ProcessInfo(splitProcessInfo[i][0],splitProcessInfo[i][1],splitProcessInfo[i][2],splitProcessInfo[i][3],splitProcessInfo[i][4],splitProcessInfo[i][5],splitProcessInfo[i][6],
+                                splitProcessInfo[i][7],splitProcessInfo[i][8],splitProcessInfo[i][9]);
+            pTableModel.add(pi);
+        }    
+    }
     
     private void prepareMemoryInfo(){
         memoryInfo = execShellCommand("free");
@@ -519,9 +544,8 @@ private void prepareDiskInfo(){
             @Override
             public void run(){
                 prepareProcessInfo();
-                tablePane.setViewportView(processTable);
-                //firstPanel.removeAll();
-                //firstPanel.add(new JScrollPane(processTable));
+                firstPanel.removeAll();
+                firstPanel.add(new JScrollPane(processTable));
                 firstPanel.validate();
             }
         };
@@ -544,11 +568,7 @@ private void prepareDiskInfo(){
             }
             case 1 -> {
                 firstTabbedPane.setSelectedIndex(1);
-                prepareProcessInfo();
-                firstPanel.removeAll();
-                firstPanel.add(new JScrollPane(processTable));
-                firstPanel.validate();
-                t1.schedule(tt1process,new Date(),500);
+                t1.schedule(tt1process,new Date(), 1000);
 
             }
             case 2 -> {
@@ -608,7 +628,7 @@ private void prepareDiskInfo(){
             }
             case 1 -> {
                 secondTabbedPane.setSelectedIndex(1);
-                t2.schedule(tt2process,new Date(),500);
+                t2.schedule(tt2process,new Date(),1000);
             }
             case 2 -> {
                 secondTabbedPane.setSelectedIndex(1);
@@ -665,7 +685,7 @@ private void prepareDiskInfo(){
             }
             case 1 -> {
                 thirdTabbedPane.setSelectedIndex(1);
-                t3.schedule(tt3process,new Date(),500);
+                t3.schedule(tt3process,new Date(),1000);
                 //prepareProcessInfo();
                 //thirdQuadrantTxt.setText(processInfo);
             }
@@ -725,7 +745,7 @@ private void prepareDiskInfo(){
             }
             case 1 -> {
                 fourthTabbedPane.setSelectedIndex(1);
-                t4.schedule(tt4process,new Date(),500);
+                t4.schedule(tt4process,new Date(),1000);
                 //prepareProcessInfo();
                 //fourthQuadrantTxt.setText(processInfo);
             }
